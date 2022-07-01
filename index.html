@@ -960,7 +960,7 @@ void main()
 
 
 
-  //init all
+  //init
   function createGUI(model, animations)
   {
  		face = model.getObjectByName( 'Head_2' );
@@ -1006,14 +1006,10 @@ void main()
         screen_zmesh2.material = materialScreen;
         screen_mesh.material = materialScreen;
       }
-
-      //can delete
       if( val=="DP map" )
       {
         maptype = 1;
       }
-
-
       if( val=="Cubemap" )
       {
         maptype = 2;
