@@ -606,7 +606,7 @@ void main()
   var state_api = { state: 'Idle' };
 
   
-  var map_select = ['Seamless DP Map', 'Cubemap'];
+  var map_select = ['CSM_Seamless DP Map', 'CSM_Cubemap', 'PCF_Seamless DP Map', 'PCF_Cubemap'];
   var map_select_api = { map_type: 'Seamless DP Map' };
   var maptype = 0;
 
@@ -791,6 +791,7 @@ void main()
 
 
     {
+      //ring objects
       var rt_geometry = new THREE.TorusBufferGeometry(.2, .05, 15, 30);
       screen_zmesh1 = new THREE.Mesh(rt_geometry, materialScreen);
       screen_zmesh1.position.set(0, .25, 0);
@@ -801,19 +802,23 @@ void main()
       screen_zmesh2.scale.set(0.75, 0.75, 0.75);
       screen_zmesh2.rotation.y = Math.PI / 2;
 
+      //plane
       screen_mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(20, 20, 100, 100), materialScreen);
       screen_mesh.rotation.x = -Math.PI / 2;
 
+      //grid
       grid = new THREE.GridHelper(20, 100, 0x000000, 0x000000);
       grid.position.set(0, .002, 0);
       grid.material.opacity = 0.2;
       grid.material.transparent = true;
 
+      //light sphere
       var geometry = new THREE.SphereBufferGeometry(1, 20, 20);
       light_sphere = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: 0xDDDDDD }));
       light_sphere.position.set(.6,.8,.6);
       light_sphere.scale.set(lightsize, lightsize, lightsize);
 
+      //position sphere
       my_dot = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: 0x7D400C }));
       my_dot.position.set(.6, 0, .6);
       my_dot.scale.set(lightsize, lightsize, lightsize);
@@ -846,6 +851,7 @@ void main()
 
     });
 
+    //ambient light
     sceneScreen.background = new THREE.Color(0xe0e0e0);
     sceneScreen.fog = new THREE.Fog(0xe0e0e0, 20, 100);
     sceneScreen.add(new THREE.AmbientLight(0x666666));
@@ -855,6 +861,9 @@ void main()
     sceneScreen.add(light);
     //sceneScreen.add(new THREE.CameraHelper(light.shadow.camera));
 
+
+
+    //blue line
     var material = new THREE.LineBasicMaterial({
       color: 0x0000ff
     });
@@ -867,6 +876,8 @@ void main()
     var line = new THREE.Line(lineA, material);
     sceneScreen.add(line);
 
+
+    //load model
     var i;
     for( i=0; i<32; i++ )
     {
@@ -881,7 +892,7 @@ void main()
         tmp.position.set(1, 0, -(model.length-1)*tile_length*2);
         
         sceneScreen.add(tmp);
-
+        //model animation init
         var tmp_mixer = new THREE.AnimationMixer(tmp);
         mixer.push( tmp_mixer );
         if(model.length==1)
@@ -908,7 +919,7 @@ void main()
   actions = {};
   var states = ['Idle', 'Walking', 'Running', 'Dance', 'Death', 'Sitting', 'Standing'];
 	var emotes = [ 'Jump', 'Yes', 'No', 'Wave', 'Punch', 'ThumbsUp' ];
-
+  //model animation random play
   function robot_say_hi()
   {
     if( beizer_t_running )
@@ -925,7 +936,7 @@ void main()
 
   my_interval_id = setInterval( 'robot_say_hi()', 10000/time_scale );
 
-
+  //model animation switch
   function fadeToAction( name, duration )
   {
     previousAction = activeAction;
@@ -934,6 +945,8 @@ void main()
       previousAction.fadeOut( duration );
     activeAction.reset().setEffectiveTimeScale(1).setEffectiveWeight(1).fadeIn(duration).play();
   }
+
+
  	function restoreState()
   {
 		mixer[0].removeEventListener( 'finished', restoreState );
@@ -944,6 +957,10 @@ void main()
 		face.morphTargetInfluences[2] = 0;
 	}
 
+
+
+
+  //init all
   function createGUI(model, animations)
   {
  		face = model.getObjectByName( 'Head_2' );
@@ -982,24 +999,36 @@ void main()
 
     gui.add(map_select_api,'map_type').options(map_select).onChange(function (val)
     {
-      if( val=="Seamless DP Map" )
+      if( val=="CSM_Seamless DP Map" )
       {
         maptype = 0;
         screen_zmesh1.material = materialScreen;
         screen_zmesh2.material = materialScreen;
         screen_mesh.material = materialScreen;
       }
-      if( val=="DP map" )
+
+      //can delete
+      if( val=="PCF_Seamless DP Map" )
       {
         maptype = 1;
       }
-      if( val=="Cubemap" )
+
+      
+
+
+      if( val=="CSM_Cubemap" )
       {
         maptype = 2;
         screen_zmesh1.material = cm_screen_mat;
         screen_zmesh2.material = cm_screen_mat;
         screen_mesh.material = cm_screen_mat;
       }
+
+      if( val=="PCF_Cubemap" )
+      {
+        maptype = 3;
+      }
+
     });
 
     gui.add(settings, 'robot number', 1, 32, 1).onChange(
@@ -1482,7 +1511,7 @@ gl.drawArrays(gl.TRIANGLES, 0, my_quad.n);
       dp_render();
       genbasis_dpmap();
     }
-    if( maptype==2 )
+    if( maptype==2  maptype==3 )
     {
       cm_render();
       genbasis_cmmap();
@@ -1520,7 +1549,7 @@ gl.drawArrays(gl.TRIANGLES, 0, my_quad.n);
         draw_tex(texdp_id[draw_tex_id < 1 ? 1 : (draw_tex_id + 5)], draw_tex_matrix);
       }
 
-      if( maptype==2 )
+      if( maptype==2 || maptype==3 )
         drawcmtex( cm_texid[draw_tex_id] );
     }
 
