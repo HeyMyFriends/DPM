@@ -606,8 +606,8 @@ void main()
   var state_api = { state: 'Idle' };
 
   
-  var map_select = ['Seamless DP Map', 'Cubemap', '11Cubemap', '11Cubemap'];
-  var map_select_api = { map_type: 'Seamless DP Map' };
+  var map_select = ['CSM_Seamless DP Map', 'PCF_Seamless DP Map', 'CSM_Cubemap', 'PCF_Cubemap'];
+  var map_select_api = { map_type: 'CSM_Seamless DP Map' };
   var maptype = 0;
 
 
@@ -985,7 +985,7 @@ void main()
 
     gui.add(map_select_api,'map_type').options(map_select).onChange(function (val)
     {
-      if( val=="Seamless DP Map" )
+      if( val=="CSM_Seamless DP Map" )
       {
         maptype = 0;
         screen_zmesh1.material = materialScreen;
@@ -996,7 +996,7 @@ void main()
       {
         maptype = 1;
       }
-      if( val=="Cubemap" )
+      if( val=="CSM_Cubemap" )
       {
         maptype = 2;
         screen_zmesh1.material = cm_screen_mat;
