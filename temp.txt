@@ -1,0 +1,46 @@
+
+  vec3 fragToLight = bv - l;
+  float currentDepth = length(fragToLight);
+  float closestDepth = returnClosetDepth(0.0, 0.0, 0.0);
+
+
+  float shadow = 0.0;
+  float bias = 0.05; 
+
+
+
+  //float offset = 4.5;//100
+  //float offset = 3.5;//64
+  //float offset = 2.5;//36
+  //float offset = 1.5;//16
+
+  //float offset = 1.0;
+  if(currentDepth - bias > closestDepth)
+  {
+    /*float x,y,z;
+    for(float x = -offset; x <= offset; x+= 1.0 )
+    {
+      for(float y =  -offset; y <= offset; y+=1.0)
+      {
+        for(float z = -offset; z <= offset; z+=1.0)
+        {
+          float closestDepth = returnClosetDepth(x,y,z);
+          if(currentDepth - bias > closestDepth)
+            shadow += 1.0;
+        }
+      }
+    }*/
+
+      
+    //shadow /= 1000.0 ;
+    //shadow /= 512.0 ;
+    //shadow /= 216.0 ;
+    //shadow /= 64.0 ;
+
+    //shadow /= 27.0;
+    shadow += 1.0;
+  }
+
+  return (1.0-shadow);
+
+    //return 1.0;
