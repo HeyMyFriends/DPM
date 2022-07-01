@@ -32,7 +32,7 @@
 <body>
 
   <div id="container"></div>
-  <div id="info"> Demo <br> [<a href="https://github.com/wzni/paper1005">the source code</a>] </div>
+  <div id="info"> Paper1005 Demo <br> [<a href="https://github.com/wzni/paper1005">the source code</a>] </div>
 
   <script src="build/three.js"></script>
   <script src="js/loaders/GLTFLoader.js"></script>
@@ -606,8 +606,8 @@ void main()
   var state_api = { state: 'Idle' };
 
   
-  var map_select = ['CSM_Seamless DP Map', 'CSM_Cubemap', 'PCF_Seamless DP Map', 'PCF_Cubemap'];
-  var map_select_api = { map_type: 'CSM_Seamless DP Map' };
+  var map_select = ['Seamless DP Map', 'Cubemap'];
+  var map_select_api = { map_type: 'Seamless DP Map' };
   var maptype = 0;
 
 
@@ -999,7 +999,7 @@ void main()
 
     gui.add(map_select_api,'map_type').options(map_select).onChange(function (val)
     {
-      if( val=="CSM_Seamless DP Map" )
+      if( val=="Seamless DP Map" )
       {
         maptype = 0;
         screen_zmesh1.material = materialScreen;
@@ -1008,27 +1008,19 @@ void main()
       }
 
       //can delete
-      if( val=="PCF_Seamless DP Map" )
+      if( val=="DP map" )
       {
         maptype = 1;
       }
 
-      
 
-
-      if( val=="CSM_Cubemap" )
+      if( val=="Cubemap" )
       {
         maptype = 2;
         screen_zmesh1.material = cm_screen_mat;
         screen_zmesh2.material = cm_screen_mat;
         screen_mesh.material = cm_screen_mat;
       }
-
-      if( val=="PCF_Cubemap" )
-      {
-        maptype = 3;
-      }
-
     });
 
     gui.add(settings, 'robot number', 1, 32, 1).onChange(
@@ -1511,7 +1503,7 @@ gl.drawArrays(gl.TRIANGLES, 0, my_quad.n);
       dp_render();
       genbasis_dpmap();
     }
-    if( maptype==2  maptype==3 )
+    if( maptype==2 )
     {
       cm_render();
       genbasis_cmmap();
@@ -1549,7 +1541,7 @@ gl.drawArrays(gl.TRIANGLES, 0, my_quad.n);
         draw_tex(texdp_id[draw_tex_id < 1 ? 1 : (draw_tex_id + 5)], draw_tex_matrix);
       }
 
-      if( maptype==2 || maptype==3 )
+      if( maptype==2 )
         drawcmtex( cm_texid[draw_tex_id] );
     }
 
