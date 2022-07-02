@@ -251,3 +251,16 @@ void main()
   gl_FragColor.w = 1.0;
 }
 </script>
+
+
+  float W0 = float(textureSize(dpmap[0], 0).x) * 0.1 ;
+
+
+  vec3 uv = normalize(ldir + vec3(i, j, k) * (1.0 / W0) );
+
+  fs = fscm2dp(fs);
+  fs = .74*ufunc(uv.z, fs);
+  
+  float ml = (log(W0*fs) / log(2.0)) * 0.1 ;
+
+  vec2 tc = vec2(uv.x, uv.y) / (1.0 + uv.z);
