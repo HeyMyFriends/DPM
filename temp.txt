@@ -44,3 +44,210 @@
   return (1.0-shadow);
 
     //return 1.0;
+
+
+
+
+
+
+
+
+
+<script id="pcf_dp_shader_fs" type="x-shader/x-fragment">
+#define PI 3.14159265358979
+#define M 4
+#define fCSMBias 0.068
+#define OFFSET 0.02
+#define SCALEFACTOR 1.11
+#define ALPHA 0.06
+
+in vec2 bt;
+in vec3 bv;
+in vec3 bn;
+
+uniform vec3 l;
+uniform vec3 eye;
+uniform float zNear;
+uniform float zFar;
+uniform float lightsize;
+uniform sampler2D tex0;
+uniform sampler2D dpmap[2 * (M +1)];
+uniform mat4 lightmv;
+uniform float shadow_a;
+uniform float shadow_b;
+
+
+float estimatefwo(float lightsize, float distance, float smpos)
+{
+  float aa, bb, cc;
+  aa = lightsize / distance;
+  bb = lightsize / smpos;
+
+  aa = clamp(aa, 0.0, 1.0);
+  bb = clamp(bb, 0.0, 1.0);
+  cc = aa*bb +sqrt( max((1.0 -aa*aa) *(1.0 -bb*bb),0.0));
+
+  return sqrt(1.0-cc*cc) / (1.0+cc);  // DP map filter size
+}
+
+float fscm2dp(float ws)
+{
+  return ws;
+  ws = clamp(ws, 0.0, 2.0);
+  if (ws < 1.0)
+  {
+    ws /= sqrt(ws*ws+1.0) +1.0;
+  }
+  else
+  {
+    ws = 2.0 -ws;
+    ws = sqrt(ws*ws+1.0) -ws;
+  }
+  return ws;
+}
+
+float ufunc( float zval, float fs )
+{
+vec2 p = vec2(sqrt(1.0-zval*zval), abs(zval));
+vec2 t = vec2(2.0*fs , 1.0-fs*fs)/(1.0+fs*fs);
+return max(p.x/(1.0+p.y)
+- (p.x*t.y-p.y*t.x)/(1.0+dot(p,t)), fs);
+}
+
+
+void wfunc( float zval, float fs, out float s0, out float sb )
+{
+  s0 = 1.0-sqrt(1.0-zval*zval)/(1.0+abs(zval));
+  sb = min(s0/fs,1.0)*sign(zval)*.5+.5;
+}
+
+float returnClosetDepth(float i, float j, float k)
+{
+  
+  float distance;
+  vec3 ldir;
+  ldir = bv - l;
+  ldir =  (vec4(ldir,1) * lightmv ).xyz;
+  distance = length(ldir);
+
+  float fs = estimatefwo(lightsize, distance, zNear);
+  fs = clamp(fs, 0.0, 2.0);
+
+  float samples = 1.0;
+  float offset = 0.001;
+  
+    
+  float W0 = float(textureSize(dpmap[0], 0).x) * 0.1 ;
+
+
+  vec3 uv = normalize(ldir + vec3(i, j, k) * (1.0 / W0) );
+
+  fs = fscm2dp(fs);
+  fs = .74*ufunc(uv.z, fs);
+  
+  float ml = (log(W0*fs) / log(2.0)) * 0.1 ;
+
+  vec2 tc = vec2(uv.x, uv.y) / (1.0 + uv.z);
+
+//vec2 texelSize =vec2(float(textureSize(dpmap[0], 0).x), float(textureSize(dpmap[0], 0).y));
+
+
+  vec4 cfront= textureLod(dpmap[0], vec2(-tc.x, tc.y)*.5+.5, ml);
+
+  tc = uv.xy / (1.0 - uv.z);
+//texelSize =vec2(float(textureSize(dpmap[0], 0).x), float(textureSize(dpmap[0], 0).y));
+
+  vec4 cback =textureLod(dpmap[1], tc*.5 + .5, ml);
+
+  float s0, sb;
+  wfunc( uv.z, fs, s0, sb );
+
+  float closestDepth = (mix(cback, cfront, sb )*2.0-1.0).r;
+  closestDepth *= zFar;   // Undo mapping [0;1]
+  //return 0.5;
+  return closestDepth;
+}
+
+
+float ShadowCalculation()
+{
+  vec3 fragToLight = bv - l;
+  float currentDepth = length(fragToLight);
+  float closestDepth = returnClosetDepth(0.0, 0.0, 0.0);
+  float shadow = 0.0;
+  float bias = 0.08; 
+
+
+  vec3 ldir;
+  ldir = bv - l;
+  ldir =  (vec4(ldir,1) * lightmv ).xyz;
+  vec3 uv = normalize(ldir);
+  //float offset = 4.5;//100
+  //float offset = 3.5;//64
+  //float offset = 2.5;//36
+  //float offset = 1.5;//16
+
+  float offset = 1.0;
+  //if(currentDepth - bias > closestDepth)
+  {
+    float x,y,z;
+    for(float x = -offset; x <= offset; x+= 1.0 )
+        {
+      for(float y =  -offset; y <= offset; y+=1.0)
+      {
+        for(float z = -offset; z <= offset; z+=1.0)
+        {
+          float closestDepth = returnClosetDepth(x,y,z);
+          if(currentDepth - bias > closestDepth)
+            shadow += 1.0;
+    }
+      }
+        }
+
+      
+    //shadow /= 1000.0 ;
+    //shadow /= 512.0 ;
+    //shadow /= 216.0 ;
+    //shadow /= 64.0 ;
+
+    shadow /= 27.0;
+    //shadow += 1.0;
+  }
+
+    return shadow;
+    
+}
+
+void main()
+{
+  gl_FragColor = vec4(1.0); //texture(tex0, bt);
+  float specular, diffuse, attenuation;
+  float ld;
+  vec3 ldir;
+  {
+    vec3 lpos, edir, ndir;
+    ndir = normalize(bn);
+    lpos = l-bv;
+    ld = length(lpos);
+    ldir = lpos/ld;
+    edir = normalize( reflect( -(eye-bv), ndir) );  // normalize(  (eye-bv) - 2.0*dot( (eye-bv) ,ndir)* ndir);
+    diffuse  = max(dot(ldir, ndir), 0.0);
+    specular = pow(max(dot(ldir,edir),0.0), 8.0*mix( 4.0, 1.0, lightsize/.2 )   );
+    attenuation = 1.5 / (1.0 + mix( .5, .75, lightsize/.2 ) * ld*ld );
+  }
+
+  //float vb = CSM_SoftShadow(  -ldir*mat3(lightmv), ld, lightsize, zNear, zFar, shadow_a, shadow_b);
+
+  float vb = ShadowCalculation();
+
+
+  // gl_FragColor.xyz = vec3(attenuation*( mix(diffuse,specular,.25) ) * vb);
+  gl_FragColor.xyz = vec3(diffuse* (1.0-vb));
+
+  //gl_FragColor = (textureLod( dpmap[1], bt, 5.0 ) + texture( dpmap[5], bt ))/2.0;
+  gl_FragColor.xyz = vec3(attenuation*diffuse* (1.0-vb));
+
+
+  gl_FragColor.w = 1.0;
+}
+</script>

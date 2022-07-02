@@ -765,21 +765,7 @@ uniform float shadow_a;
 uniform float shadow_b;
 uniform float tex_size;
 
-vec4 getweights(float alpha, float k, float m)
-{
-  vec4 weights = vec4(exp(-alpha*(k) *(k) / (m*m)),
-  exp(-alpha*(k +1.0) *(k +1.0) / (m*m)),
-  exp(-alpha*(k +2.0) *(k +2.0) / (m*m)),
-  exp(-alpha*(k +3.0) *(k +3.0) / (m*m)));
-  return weights;
-}
 
-float estimateFilterWidth(float lightsize, float currentDepth, float blockerDepth)
-{   // receiver depth
-  float receiver = currentDepth;
-  float FilterWidth = (receiver -blockerDepth) *lightsize / (2.0 * currentDepth*blockerDepth);
-  return FilterWidth;
-}
 
 float estimatefwo(float lightsize, float distance, float smpos)
 {
@@ -796,110 +782,84 @@ float estimatefwo(float lightsize, float distance, float smpos)
   return sqrt(1.0 / (cc*cc) -1.0);
 }
 
-vec4 _f4mipmapCMMAP(samplerCube cmmap, vec3 uv, float fs)
+float returnClosetDepth(float i, float j, float k)
 {
-  vec4 result;
-  uv = normalize(uv); 
-  float W0 = float(textureSize(cmmap, 0).x);
-  float ml = log(W0*fs) / log(2.0);
-  result = textureLod(cmmap, uv, ml);
-  return result;
-}
+  
+  float distance;
+  vec3 ldir;
+  ldir = bv - l;
+  ldir =  (vec4(ldir,1) * lightmv ).xyz;
+  distance = length(ldir);
+  float W0 = float(textureSize(cmmap[0], 0).x);
 
-vec4 f4mipmapCMMAP(samplerCube cmmap, vec3 uv, float fs)
-{
-  return _f4mipmapCMMAP(cmmap, uv, fs) *2.0-1.0;
-}
-
-float CSSM_CM_Z_Basis(
-  vec3 uv,
-  float currentDepth,
-  float filterwidth
-){
-  vec4 tmp, sin_val_z, cos_val_z;
-  float sum0, sum1;
-  float depthvalue = f4mipmapCMMAP(cmmap[0], uv, filterwidth).x;
-  sin_val_z = f4mipmapCMMAP(cmmap[4], uv, filterwidth);
-  cos_val_z = f4mipmapCMMAP(cmmap[3], uv, filterwidth);
-  tmp = PI*vec4(1.0, 3.0, 5.0, 7.0);
-  vec4 weights = getweights(ALPHA, 1.0, float(M));
-  sum0 = dot(sin(tmp*(currentDepth -fCSMBias)) / tmp, cos_val_z*weights);
-  sum1 = dot(cos(tmp*(currentDepth -fCSMBias)) / tmp, sin_val_z*weights);
-  return 0.5*depthvalue +2.0*(sum0 -sum1);
-}
-
-float CSSM_CM_Basis(
-  vec3 uv,
-  float currentDepth,
-  float filterwidth, 
-  float supress_flag
-){
-  vec4 tmp, sin_val, cos_val;
-  float sum0, sum1;
-  sin_val = f4mipmapCMMAP(cmmap[2], uv, filterwidth);
-  cos_val = f4mipmapCMMAP(cmmap[1], uv, filterwidth);
-  tmp = PI*vec4(1.0, 3.0, 5.0, 7.0);
-  vec4 weights = getweights(ALPHA, 1.0, float(M));
-  sum0 = dot(cos(tmp*(currentDepth -fCSMBias)) / tmp, sin_val*weights);
-  sum1 = dot(sin(tmp*(currentDepth -fCSMBias)) / tmp, cos_val*weights);
-  float rec = 0.5 +2.0*(sum0 -sum1);
-  if (supress_flag == 1.0)
-  rec = SCALEFACTOR*(rec -OFFSET);
-  return clamp((1.0*rec), 0.0, 1.0);
-}
-
-float FindBlockDepth_CM(
-  vec3 uv,
-  float currentDepth,
-  float distance,
-  float lightsize,
-  float zNear,
-  float zFar
- ){
+  vec3 uv = normalize(ldir + vec3(i, j, k) * (1.0 / W0));
   float fs = estimatefwo(lightsize, distance, zNear);
   fs = clamp(fs, 0.0, 2.0);
-  float blockedNum = 1.0 - CSSM_CM_Basis(uv, currentDepth, fs, 0.0);
-  if( blockedNum>0.001 )
-  {
-    float Z_avg;
-    Z_avg = CSSM_CM_Z_Basis(uv, currentDepth, fs) / blockedNum;
-    return Z_avg*zFar;
-  }
-  else
-  return distance+1.0;
+
+                
+  float ml = log(W0*fs*.74) / log(2.0)  * 0.1;
+
+  float closestDepth = (textureLod(cmmap[0], uv, ml)*2.0-1.0).r;
+
+  closestDepth *= zFar;   // Undo mapping [0;1]
+
+  return closestDepth;
+
+
 }
 
-float csm_cm_pcf_filter(
-  vec3 uv,
-  float currentDepth,
-  float filterWidth
-){
-  float shadow = CSSM_CM_Basis(uv, currentDepth, filterWidth, 1.0);
-  return shadow;
+
+float ShadowCalculation()
+{
+
+  vec3 fragToLight = bv - l;
+  float currentDepth = length(fragToLight);
+  float closestDepth = returnClosetDepth(0.0, 0.0, 0.0);
+  float shadow = 0.0;
+  float bias = 0.08; 
+
+
+  vec3 ldir;
+  ldir = bv - l;
+  ldir =  (vec4(ldir,1) * lightmv ).xyz;
+  vec3 uv = normalize(ldir);
+  //float offset = 4.5;//100
+  //float offset = 3.5;//64
+  //float offset = 2.5;//36
+  //float offset = 1.5;//16
+
+  float offset = 1.0;
+  //if(currentDepth - bias > closestDepth)
+  {
+    float x,y,z;
+    for(float x = -offset; x <= offset; x+= 1.0 )
+        {
+      for(float y =  -offset; y <= offset; y+=1.0)
+      {
+        for(float z = -offset; z <= offset; z+=1.0)
+        {
+          float closestDepth = returnClosetDepth(x,y,z);
+          if(currentDepth - bias > closestDepth)
+            shadow += 1.0;
+    }
+      }
+        }
+
+      
+    //shadow /= 1000.0 ;
+    //shadow /= 512.0 ;
+    //shadow /= 216.0 ;
+    //shadow /= 64.0 ;
+
+    shadow /= 27.0;
+    //shadow += 1.0;
+  }
+
+    return shadow;
+    
+    
 }
 
-float CSM_CM_SoftShadow(
-  vec3 uv,
-  float distance,
-  float lightsize,
-  float zNear,
-  float zFar,
-  float shadow_a,
-  float shadow_b
-){
-  float currentDepth = distance/zFar;
-  float blockerdepth = FindBlockDepth_CM(uv, currentDepth, distance, lightsize, zNear, zFar);
-  float shadow = 1.0;
-  if( blockerdepth < distance  )
-  {
-    float FilterWidth = estimatefwo(lightsize, distance, blockerdepth);
-    shadow = csm_cm_pcf_filter(uv, currentDepth, FilterWidth);
-    float temp = shadow_b*(blockerdepth -distance);
-    float power = 1.0 +shadow_a* exp(temp);
-    shadow = pow(shadow, power);
-  }
-  return shadow;
-}
 
 void main()
 {
@@ -920,9 +880,10 @@ void main()
     attenuation = 1.5 / (1.0 + mix( .5, .75, lightsize/.2 ) * ld*ld );
   }
 
-  float vb = CSM_CM_SoftShadow( -ldir*mat3(lightmv), ld, lightsize, zNear, zFar, shadow_a, shadow_b);
+  //float vb = CSM_CM_SoftShadow( -ldir*mat3(lightmv), ld, lightsize, zNear, zFar, shadow_a, shadow_b);
+  float vb = ShadowCalculation();
   // gl_FragColor.xyz = vec3(attenuation*( mix(diffuse,specular,.25) ) * vb);
-  gl_FragColor.xyz = vec3(attenuation*diffuse* vb);
+  gl_FragColor.xyz = vec3(attenuation*diffuse* (1.0-vb));
   gl_FragColor.w=1.0;
 }
 
@@ -1033,8 +994,8 @@ void main()
 
   var settings;
 
-  var cm_camera, cm_face_mat, csm_cm_mat, cm_rt, cm_texid;
-  var cameraRTT, materialRTT, csm_dp_mat, texdp_rt_id, texdp_id;
+  var cm_camera, cm_face_mat, csm_cm_mat, cm_rt, cm_texid, pcf_cm_mat;
+  var cameraRTT, materialRTT, csm_dp_mat, texdp_rt_id, texdp_id, pcf_dp_mat;
 
 
   var cameraScreen, cameraScreen_controls;
@@ -1465,9 +1426,9 @@ void main()
       if( val=="PCF_DP map" )
       {
         maptype = 1;
-        screen_zmesh1.material = csm_dp_mat;
-        screen_zmesh2.material = csm_dp_mat;
-        screen_mesh.material = csm_dp_mat;
+        screen_zmesh1.material = pcf_dp_mat;
+        screen_zmesh2.material = pcf_dp_mat;
+        screen_mesh.material = pcf_dp_mat;
       }
       if( val=="CSM_Cubemap" )
       {
@@ -1479,9 +1440,9 @@ void main()
       if( val=="PCF_Cubemap" )
       {
         maptype = 3;
-        screen_zmesh1.material = csm_cm_mat;
-        screen_zmesh2.material = csm_cm_mat;
-        screen_mesh.material = csm_cm_mat;
+        screen_zmesh1.material = pcf_cm_mat;
+        screen_zmesh2.material = pcf_cm_mat;
+        screen_mesh.material = pcf_cm_mat;
       }
     });
 
@@ -1982,11 +1943,21 @@ gl.drawArrays(gl.TRIANGLES, 0, my_quad.n);
     csm_dp_mat.uniforms["lightsize"].value = lightsize;
     csm_dp_mat.uniforms["zFar"].value = zFar;
 
+    pcf_dp_mat.uniforms["l"].value.set(l.x, l.y, l.z);
+    pcf_dp_mat.uniforms["eye"].value = cameraScreen.position;
+    pcf_dp_mat.uniforms["lightsize"].value = lightsize;
+    pcf_dp_mat.uniforms["zFar"].value = zFar;
+
+
     csm_cm_mat.uniforms["l"].value.set(l.x, l.y, l.z);
     csm_cm_mat.uniforms["eye"].value = cameraScreen.position;
     csm_cm_mat.uniforms["lightsize"].value = lightsize;
     csm_cm_mat.uniforms["zFar"].value = zFar;
 
+    pcf_cm_mat.uniforms["l"].value.set(l.x, l.y, l.z);
+    pcf_cm_mat.uniforms["eye"].value = cameraScreen.position;
+    pcf_cm_mat.uniforms["lightsize"].value = lightsize;
+    pcf_cm_mat.uniforms["zFar"].value = zFar;
 
     // csm_dp_mat.uniforms["lightmv"].value = new THREE.Matrix4();
     // sceneScreen.overrideMaterial = materialRTT;
