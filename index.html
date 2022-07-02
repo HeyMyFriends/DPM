@@ -1673,7 +1673,7 @@ void main()
       light_sphere.scale.set(lightsize, lightsize, lightsize);
 
       my_dot = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: 0x7D400C }));
-      my_dot.position.set(.6, 0, .6);
+      my_dot.position.set(.6, .3, .6);
       my_dot.scale.set(lightsize, lightsize, lightsize);
 
     }
@@ -1970,7 +1970,7 @@ function animate()
     var theta = 2*Math.PI/nrobot*i   + theta0;
     var radius = tile_length*2 * nrobot / (2*Math.PI);
     radius = Math.max(1,radius);
-    model[i].rotation.y = -theta;
+    //model[i].rotation.y = -theta;
     model[i].position.set( Math.cos(theta)*radius, .3, Math.sin(theta)*radius );
   }
 
@@ -2376,7 +2376,7 @@ gl.uniformMatrix4fv(drawcmtex_shader.mtc, true, [-1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0
           var tmp = new THREE.Vector3();
           tmp.copy(modelforward);
           tmp.cross(modelforward0);
-          model[0].rotation.y =  (tmp.y>0?-1:1) * Math.acos(modelforward.dot(modelforward0));
+          //model[0].rotation.y =  (tmp.y>0?-1:1) * Math.acos(modelforward.dot(modelforward0));
           model[0].position.copy(beizer(beizer_t));
         }
       }
