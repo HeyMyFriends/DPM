@@ -32,13 +32,13 @@
 <body>
 
   <div id="container"></div>
-  <div id="info"> Dissertation <br> [<a href="https://github.com/wzni/paper1005">the source code</a>] </div>
+  
 
   <script src="build/three.js"></script>
   <script src="js/loaders/GLTFLoader.js"></script>
   <script src="js/controls/OrbitControls2.js"></script>
   <script src="js/WebGL.js"></script>
-  <script src="js/libs/stats.min.js"></script>
+
   <script src="js/libs/dat.gui.js"></script>
   <script src="js/controls/DeviceOrientationControls.js"></script>
   <script src="js/controls/DragControls.js"></script>
@@ -453,12 +453,17 @@ float ShadowCalculation()
   //float offset = 2.5;//36
   //float offset = 1.5;//16
 
-  float offset = 1.0;
+  float offset = 0.0;
+  if(pcf_cm_filetersize != 1.0)
+  {
+    offset = pcf_dp_filetersize - 2.0;
+  }
+   
   //if(currentDepth - bias > closestDepth)
   {
     float x,y,z;
     for(float x = -offset; x <= offset; x+= 1.0 )
-        {
+    {
       for(float y =  -offset; y <= offset; y+=1.0)
       {
         for(float z = -offset; z <= offset; z+=1.0)
@@ -466,17 +471,25 @@ float ShadowCalculation()
           float closestDepth = returnClosetDepth(x,y,z);
           if(currentDepth - bias > closestDepth)
             shadow += 1.0;
-    }
-      }
         }
+      }
+    }
 
+    if(pcf_dp_filetersize == 3.0)
+    {
+      shadow /= 27.0;
+    }
+    if(pcf_dp_filetersize == 5.0)
+    {
+      shadow /= 125.0;
+    }
       
     //shadow /= 1000.0 ;
     //shadow /= 512.0 ;
     //shadow /= 216.0 ;
     //shadow /= 64.0 ;
 
-    shadow /= 27.0;
+    //shadow /= 27.0;
     //shadow += 1.0;
   }
 
@@ -827,13 +840,17 @@ float ShadowCalculation()
   //float offset = 3.5;//64
   //float offset = 2.5;//36
   //float offset = 1.5;//16
-
-  float offset = 1.0;
+  float offset = 0.0;
+  if(pcf_cm_filetersize != 1.0)
+  {
+    offset = pcf_cm_filetersize - 2.0;
+  }
+   
   //if(currentDepth - bias > closestDepth)
   {
     float x,y,z;
     for(float x = -offset; x <= offset; x+= 1.0 )
-        {
+    {
       for(float y =  -offset; y <= offset; y+=1.0)
       {
         for(float z = -offset; z <= offset; z+=1.0)
@@ -841,17 +858,25 @@ float ShadowCalculation()
           float closestDepth = returnClosetDepth(x,y,z);
           if(currentDepth - bias > closestDepth)
             shadow += 1.0;
-    }
-      }
         }
+      }
+    }
 
+    if(pcf_dp_filetersize == 3.0)
+    {
+      shadow /= 27.0;
+    }
+    if(pcf_dp_filetersize == 5.0)
+    {
+      shadow /= 125.0;
+    }
       
     //shadow /= 1000.0 ;
     //shadow /= 512.0 ;
     //shadow /= 216.0 ;
     //shadow /= 64.0 ;
 
-    shadow /= 27.0;
+    //shadow /= 27.0;
     //shadow += 1.0;
   }
 
@@ -1025,6 +1050,8 @@ void main()
   var time_scale = 1;
   var draw_tex_id = 1;
   var num_of_display_robot = 1;
+  var pcf_dp_filetersize = 1;
+  var pcf_cm_filetersize = 1;
                    
   var model = new Array(), mixer = new Array();
   var modelforward0 = new THREE.Vector3(0, 0, 1);
@@ -1048,7 +1075,7 @@ void main()
 
     gui = new dat.GUI();
 
-    stats = new Stats();
+    //stats = new Stats();
 
     renderer = new THREE.WebGLRenderer({ canvas: canvas, context: gl });
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -1057,7 +1084,7 @@ void main()
     
     container = document.getElementById('container');
     container.appendChild(renderer.domElement);
-    container.appendChild(stats.dom);
+    //container.appendChild(stats.dom);
 
 
     //cube map depth texture generate
@@ -1410,7 +1437,9 @@ void main()
       'tex_id':draw_tex_id,
       'robot number':num_of_display_robot,
       'time_scale': time_scale,
-      'full screen': 0
+      'full screen': 0,
+      'PCF_DP_Filtersize': pcf_dp_filetersize,
+      'PCF_CM_Filtersize': pcf_cm_filetersize
     };
 
 
@@ -1445,6 +1474,17 @@ void main()
         screen_mesh.material = pcf_cm_mat;
       }
     });
+
+    gui.add(settings, 'PCF_DP_Filtersize', 1.0, 5.0, 2.0).onChange(
+      function (val) {
+        pcf_dp_filetersize = val;
+      });
+
+    gui.add(settings, 'PCF_CM_Filtersize', 1.0, 5.0, 2.0).onChange(
+      function (val) {
+        pcf_cm_filetersize = val;
+      });
+
 
     gui.add(settings, 'robot number', 1, 32, 1).onChange(
       function (val) {
@@ -1523,7 +1563,7 @@ function animate()
   requestAnimationFrame(animate);
   cameraScreen_controls.update();
   render();
-  stats.update();
+  //stats.update();
 }
 
 
@@ -1700,7 +1740,7 @@ function animate()
     drawtex_shader.use();
     gl.uniform1i(drawtex_shader.tex0, 0);
     gl.uniformMatrix4fv(drawtex_shader.mvp, false, matrix);
-    gl.drawArrays(gl.TRIANGLES, 0, my_quad.n);
+    //gl.drawArrays(gl.TRIANGLES, 0, my_quad.n);
 
     if (!v0_enabled0)
       gl.disableVertexAttribArray(drawtex_shader.v0);
@@ -1738,38 +1778,38 @@ function drawcmtex( tex0 )
     matrix = m4.multiply(matrix, m4.translation(0,1,0));
     gl.uniformMatrix4fv(drawcmtex_shader.mvp, false, matrix );
     gl.uniformMatrix4fv(drawcmtex_shader.mtc, true, [0,0,1,0, 0,1,0,0, 1,0,0,0, 0,0,0,1] );
-    gl.drawArrays(gl.TRIANGLES, 0, my_quad.n);
+    //gl.drawArrays(gl.TRIANGLES, 0, my_quad.n);
 
     matrix = m4.orthographic(0, 9*aspect, 0, 9, -1, 1);
     matrix = m4.multiply(matrix, m4.translation(2,1,0));
     gl.uniformMatrix4fv(drawcmtex_shader.mvp, false, matrix );
     gl.uniformMatrix4fv(drawcmtex_shader.mtc, true, [0,0,-1,0, 0,1,0,0, -1,0,0,0, 0,0,0,1] );
-    gl.drawArrays(gl.TRIANGLES, 0, my_quad.n);
+    //gl.drawArrays(gl.TRIANGLES, 0, my_quad.n);
 
 matrix = m4.orthographic(0, 9*aspect, 0, 9, -1, 1);
 matrix = m4.multiply(matrix, m4.translation(1,1,0));
 gl.uniformMatrix4fv(drawcmtex_shader.mvp, false, matrix );
 gl.uniformMatrix4fv(drawcmtex_shader.mtc, true, [-1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1] );
-gl.drawArrays(gl.TRIANGLES, 0, my_quad.n);
+//gl.drawArrays(gl.TRIANGLES, 0, my_quad.n);
 
     matrix = m4.orthographic(0, 9*aspect, 0, 9, -1, 1);
     matrix = m4.multiply(matrix, m4.translation(3,1,0));
     gl.uniformMatrix4fv(drawcmtex_shader.mvp, false, matrix );
     gl.uniformMatrix4fv(drawcmtex_shader.mtc, true, [1,0,0,0, 0,1,0,0, 0,0,-1,0, 0,0,0,1] );
-    gl.drawArrays(gl.TRIANGLES, 0, my_quad.n);
+    //gl.drawArrays(gl.TRIANGLES, 0, my_quad.n);
 
 
     matrix = m4.orthographic(0, 9*aspect, 0, 9, -1, 1);
     matrix = m4.multiply(matrix, m4.translation(1,2,0));
     gl.uniformMatrix4fv(drawcmtex_shader.mvp, false, matrix );
     gl.uniformMatrix4fv(drawcmtex_shader.mtc, true, [-1,0,0,0, 0,0,1,0, 0,-1,0,0, 0,0,0,1] );
-    gl.drawArrays(gl.TRIANGLES, 0, my_quad.n);
+    //gl.drawArrays(gl.TRIANGLES, 0, my_quad.n);
 
     matrix = m4.orthographic(0, 9*aspect, 0, 9, -1, 1);
     matrix = m4.multiply(matrix, m4.translation(1,0,0));
     gl.uniformMatrix4fv(drawcmtex_shader.mvp, false, matrix );
     gl.uniformMatrix4fv(drawcmtex_shader.mtc, true, [-1,0,0,0, 0,0,-1,0, 0,1,0,0, 0,0,0,1] );
-    gl.drawArrays(gl.TRIANGLES, 0, my_quad.n);
+    //gl.drawArrays(gl.TRIANGLES, 0, my_quad.n);
 
     if (!v0_enabled0)
       gl.disableVertexAttribArray(drawcmtex_shader.v0);
@@ -1975,7 +2015,7 @@ gl.drawArrays(gl.TRIANGLES, 0, my_quad.n);
         draw_tex(texdp_id[draw_tex_id < 1 ? 1 : (draw_tex_id + 5)], draw_tex_matrix);
       }
 
-      if( maptype==2 )
+      if( maptype==2 || maptype==3 )
         drawcmtex( cm_texid[draw_tex_id] );
     }
 

@@ -264,3 +264,15 @@ void main()
   float ml = (log(W0*fs) / log(2.0)) * 0.1 ;
 
   vec2 tc = vec2(uv.x, uv.y) / (1.0 + uv.z);
+
+
+    if( maptype==0 || maptype==1 )
+    {
+      dp_render();
+      genbasis_dpmap();
+    }
+    if( maptype==2 || maptype==3 )
+    {
+      cm_render();
+      genbasis_cmmap();
+    }
