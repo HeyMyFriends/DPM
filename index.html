@@ -2360,7 +2360,7 @@ gl.uniformMatrix4fv(drawcmtex_shader.mtc, true, [-1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0
           //console.log(beizer_length);
           var beizer_dt = ((new Date()).getTime()-beizer_t0)/1000 /beizer_length *tiles_per_second *tiles_length * time_scale ;
           beizer_t0 = (new Date()).getTime();
-          beizer_t = g_clamp( beizer_t+beizer_dt   , 0, 1 );
+          beizer_t = g_clamp( beizer_t+beizer_dt   , .3, 1 );
 
           if( beizer_t>=1 && beizer_t_running )
           {
