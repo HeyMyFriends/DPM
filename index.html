@@ -468,18 +468,18 @@ float ShadowCalculation()
   //float offset = 1.5;//16
 
   float offset = 1.5;
-  if(pcf_dp_filetersize == 4.0)
+ /* if(pcf_cm_filetersize == 4.0)
   {
     offset = 1.5;
   }
-  if(pcf_dp_filetersize == 6.0)
+  if(pcf_cm_filetersize == 6.0)
   {
     offset = 2.5;
   }
-    if(pcf_dp_filetersize == 8.0)
+    if(pcf_cm_filetersize == 8.0)
   {
     offset = 3.5;
-  }
+  }*/
    
   //if(currentDepth - bias > closestDepth)
   {
@@ -496,29 +496,30 @@ float ShadowCalculation()
         }
       }
     }
-
-    if(pcf_dp_filetersize == 4.0)
+/*
+    if(pcf_cm_filetersize == 4.0)
     {
       shadow /= 64.0;
     }
-    if(pcf_dp_filetersize == 6.0)
+    if(pcf_cm_filetersize == 6.0)
     {
       shadow /= 216.0;
     }
-    if(pcf_dp_filetersize == 8.0)
+    if(pcf_cm_filetersize == 8.0)
     {
       shadow /= 512.0;
-    }
+    }*/
     //shadow /= 1000.0 ;
     //shadow /= 512.0 ;
     //shadow /= 216.0 ;
-    //shadow /= 64.0 ;
+    shadow /= 64.0 ;
 
     //shadow /= 27.0;
     //shadow += 1.0;
   }
 
     return shadow;
+    
     
 }
 
@@ -1056,7 +1057,7 @@ float ShadowCalculation()
   //float offset = 2.5;//36
   //float offset = 1.5;//16
   float offset = 1.5;
-  if(pcf_cm_filetersize == 4.0)
+ /* if(pcf_cm_filetersize == 4.0)
   {
     offset = 1.5;
   }
@@ -1067,7 +1068,7 @@ float ShadowCalculation()
     if(pcf_cm_filetersize == 8.0)
   {
     offset = 3.5;
-  }
+  }*/
    
   //if(currentDepth - bias > closestDepth)
   {
@@ -1084,7 +1085,7 @@ float ShadowCalculation()
         }
       }
     }
-
+/*
     if(pcf_cm_filetersize == 4.0)
     {
       shadow /= 64.0;
@@ -1096,11 +1097,11 @@ float ShadowCalculation()
     if(pcf_cm_filetersize == 8.0)
     {
       shadow /= 512.0;
-    }
+    }*/
     //shadow /= 1000.0 ;
     //shadow /= 512.0 ;
     //shadow /= 216.0 ;
-    //shadow /= 64.0 ;
+    shadow /= 64.0 ;
 
     //shadow /= 27.0;
     //shadow += 1.0;
@@ -1407,8 +1408,8 @@ void main()
   var time_scale = 1;
   var draw_tex_id = 1;
   var num_of_display_robot = 1;
-  var pcf_dp_filetersize = 4.0;
-  var pcf_cm_filetersize = 4.0;
+  /*var pcf_dp_filetersize = 4.0;
+  var pcf_cm_filetersize = 4.0;*/
 
                    
   var model = new Array(), mixer = new Array();
@@ -1837,9 +1838,9 @@ void main()
       'tex_id':draw_tex_id,
       'robot number':num_of_display_robot,
       'time_scale': time_scale,
-      'full screen': 0,
-      'PCF_DP_Filtersize': pcf_dp_filetersize,
-      'PCF_CM_Filtersize': pcf_cm_filetersize
+      'full screen': 0
+/*      'PCF_DP_Filtersize': pcf_dp_filetersize,
+      'PCF_CM_Filtersize': pcf_cm_filetersize*/
     };
 
 
@@ -1894,7 +1895,7 @@ void main()
 
     });
 
-    gui.add(settings, 'PCF_DP_Filtersize', 4.0, 8.0, 2.0).onChange(
+/*    gui.add(settings, 'PCF_DP_Filtersize', 4.0, 8.0, 2.0).onChange(
       function (val) {
         pcf_dp_filetersize = val;
       });
@@ -1903,7 +1904,7 @@ void main()
       function (val) {
         pcf_cm_filetersize = val;
       });
-
+*/
 
     gui.add(settings, 'robot number', 1, 32, 1).onChange(
       function (val) {
