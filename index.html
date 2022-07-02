@@ -1737,7 +1737,7 @@ void main()
       {
         var tmp = gltf.scene;
         model.push(tmp);
-        tmp.scale.set(.1, .1, .1);
+        //tmp.scale.set(.1, .1, .1);
         tmp.translateOnAxis(modelforward, .3);
        
         tmp.position.set(1, 0, -(model.length-1)*tile_length*2);
@@ -1766,8 +1766,8 @@ void main()
     }
 
   }
-/*
-  actions = {};
+
+  /*actions = {};
   var states = ['Idle', 'Walking', 'Running', 'Dance', 'Death', 'Sitting', 'Standing'];
   var emotes = [ 'Jump', 'Yes', 'No', 'Wave', 'Punch', 'ThumbsUp' ];
 
@@ -1785,7 +1785,7 @@ void main()
     face.morphTargetInfluences[2] = Math.random();
   }
 
-  my_interval_id = setInterval( 'robot_say_hi()', 10000/time_scale );
+  my_interval_id = setInterval( 'robot_say_hi()', 10000/time_scale );*/
 
 
   function fadeToAction( name, duration )
@@ -1804,7 +1804,7 @@ void main()
     face.morphTargetInfluences[0] = 0;
     face.morphTargetInfluences[1] = 1;
     face.morphTargetInfluences[2] = 0;
-  }*/
+  }
 
   function createGUI(model, animations)
   {
