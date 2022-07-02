@@ -1971,7 +1971,7 @@ function animate()
     var radius = tile_length*2 * nrobot / (2*Math.PI);
     radius = Math.max(1,radius);
     model[i].rotation.y = -theta;
-    model[i].position.set( Math.cos(theta)*radius, 0, Math.sin(theta)*radius );
+    model[i].position.set( Math.cos(theta)*radius, .3, Math.sin(theta)*radius );
   }
 
   if (mixer[0]) mixer[0].update(dt * tiles_per_second*tiles_length);
