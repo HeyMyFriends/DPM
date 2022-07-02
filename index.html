@@ -790,7 +790,7 @@ float returnClosetDepth(float i, float j, float k)
   ldir = bv - l;
   ldir =  (vec4(ldir,1) * lightmv ).xyz;
   distance = length(ldir);
-  float W0 = float(textureSize(cmmap[0], 0).x);
+  float W0 = float(textureSize(cmmap[0], 0).x) * 0.1;
 
   vec3 uv = normalize(ldir + vec3(i, j, k) * (1.0 / W0));
   float fs = estimatefwo(lightsize, distance, zNear);
@@ -824,11 +824,11 @@ float ShadowCalculation()
   ldir =  (vec4(ldir,1) * lightmv ).xyz;
   vec3 uv = normalize(ldir);
   //float offset = 4.5;//100
-  float offset = 3.5;//64
+  //float offset = 3.5;//64
   //float offset = 2.5;//36
   //float offset = 1.5;//16
 
-  //float offset = 1.0;
+  float offset = 1.0;
   //if(currentDepth - bias > closestDepth)
   {
     float x,y,z;
@@ -847,11 +847,11 @@ float ShadowCalculation()
 
       
     //shadow /= 1000.0 ;
-    shadow /= 512.0 ;
+    //shadow /= 512.0 ;
     //shadow /= 216.0 ;
     //shadow /= 64.0 ;
 
-    //shadow /= 27.0;
+    shadow /= 27.0;
     //shadow += 1.0;
   }
 
