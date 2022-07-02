@@ -1733,7 +1733,7 @@ void main()
     for( i=0; i<32; i++ )
     {
       var loader = new THREE.GLTFLoader();
-      loader.load('models/gltf/RobotExpressive/Totoro.glb', function (gltf)
+      loader.load('models/gltf/RobotExpressive/Shark.glb', function (gltf)
       {
         var tmp = gltf.scene;
         model.push(tmp);
@@ -1744,11 +1744,11 @@ void main()
         
         sceneScreen.add(tmp);
 
-        var tmp_mixer = new THREE.AnimationMixer(tmp);
-        mixer.push( tmp_mixer );
+/*        var tmp_mixer = new THREE.AnimationMixer(tmp);
+        mixer.push( tmp_mixer );*/
         if(model.length==1)
           createGUI(tmp, gltf.animations);
-        else
+        /*else
         {
           for (var i = 0; i < gltf.animations.length; i++)
           {
@@ -1758,7 +1758,7 @@ void main()
               break;
             }
           }
-        }
+        }*/
 
       }, undefined, function (e) {
         console.error(e);
@@ -1766,7 +1766,7 @@ void main()
     }
 
   }
-
+/*
   actions = {};
   var states = ['Idle', 'Walking', 'Running', 'Dance', 'Death', 'Sitting', 'Standing'];
   var emotes = [ 'Jump', 'Yes', 'No', 'Wave', 'Punch', 'ThumbsUp' ];
@@ -1804,11 +1804,11 @@ void main()
     face.morphTargetInfluences[0] = 0;
     face.morphTargetInfluences[1] = 1;
     face.morphTargetInfluences[2] = 0;
-  }
+  }*/
 
   function createGUI(model, animations)
   {
-    face = model.getObjectByName( 'Head_2' );
+    /*face = model.getObjectByName( 'Head_2' );
 
 
     for (var i = 0; i < animations.length; i++)
@@ -1827,7 +1827,7 @@ void main()
     activeAction.play();
     face.morphTargetInfluences[0] = 0;
     face.morphTargetInfluences[1] = 1;
-    face.morphTargetInfluences[2] = 0;
+    face.morphTargetInfluences[2] = 0;*/
 
 
 
