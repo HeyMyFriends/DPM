@@ -883,7 +883,7 @@ void main()
   //float vb = CSM_CM_SoftShadow( -ldir*mat3(lightmv), ld, lightsize, zNear, zFar, shadow_a, shadow_b);
   float vb = ShadowCalculation();
   // gl_FragColor.xyz = vec3(attenuation*( mix(diffuse,specular,.25) ) * vb);
-  gl_FragColor.xyz = vec3(attenuation*diffuse* (1.0));
+  gl_FragColor.xyz = vec3(attenuation*diffuse* (1.0-vb));
   gl_FragColor.w=1.0;
 }
 
