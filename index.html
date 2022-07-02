@@ -454,9 +454,17 @@ float ShadowCalculation()
   //float offset = 1.5;//16
 
   float offset = 0.0;
-  if(pcf_cm_filetersize != 1.0)
+  if(pcf_dp_filetersize == 4.0)
   {
-    offset = pcf_dp_filetersize - 2.0;
+    offset = 1.5;
+  }
+  if(pcf_dp_filetersize == 6.0)
+  {
+    offset = 2.5;
+  }
+    if(pcf_dp_filetersize == 8.0)
+  {
+    offset = 3.5;
   }
    
   //if(currentDepth - bias > closestDepth)
@@ -475,15 +483,18 @@ float ShadowCalculation()
       }
     }
 
-    if(pcf_dp_filetersize == 3.0)
+    if(pcf_dp_filetersize == 4.0)
     {
-      shadow /= 27.0;
+      shadow /= 64.0;
     }
-    if(pcf_dp_filetersize == 5.0)
+    if(pcf_dp_filetersize == 6.0)
     {
-      shadow /= 125.0;
+      shadow /= 216.0;
     }
-      
+    if(pcf_dp_filetersize == 8.0)
+    {
+      shadow /= 512.0;
+    }
     //shadow /= 1000.0 ;
     //shadow /= 512.0 ;
     //shadow /= 216.0 ;
@@ -841,9 +852,17 @@ float ShadowCalculation()
   //float offset = 2.5;//36
   //float offset = 1.5;//16
   float offset = 0.0;
-  if(pcf_cm_filetersize != 1.0)
+  if(pcf_dp_filetersize == 4.0)
   {
-    offset = pcf_cm_filetersize - 2.0;
+    offset = 1.5;
+  }
+  if(pcf_dp_filetersize == 6.0)
+  {
+    offset = 2.5;
+  }
+    if(pcf_dp_filetersize == 8.0)
+  {
+    offset = 3.5;
   }
    
   //if(currentDepth - bias > closestDepth)
@@ -862,15 +881,18 @@ float ShadowCalculation()
       }
     }
 
-    if(pcf_dp_filetersize == 3.0)
+    if(pcf_dp_filetersize == 4.0)
     {
-      shadow /= 27.0;
+      shadow /= 64.0;
     }
-    if(pcf_dp_filetersize == 5.0)
+    if(pcf_dp_filetersize == 6.0)
     {
-      shadow /= 125.0;
+      shadow /= 216.0;
     }
-      
+    if(pcf_dp_filetersize == 8.0)
+    {
+      shadow /= 512.0;
+    }
     //shadow /= 1000.0 ;
     //shadow /= 512.0 ;
     //shadow /= 216.0 ;
@@ -1475,12 +1497,12 @@ void main()
       }
     });
 
-    gui.add(settings, 'PCF_DP_Filtersize', 1.0, 5.0, 2.0).onChange(
+    gui.add(settings, 'PCF_DP_Filtersize', 4.0, 8.0, 2.0).onChange(
       function (val) {
         pcf_dp_filetersize = val;
       });
 
-    gui.add(settings, 'PCF_CM_Filtersize', 1.0, 5.0, 2.0).onChange(
+    gui.add(settings, 'PCF_CM_Filtersize', 4.0, 8.0, 2.0).onChange(
       function (val) {
         pcf_cm_filetersize = val;
       });
