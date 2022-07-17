@@ -38,7 +38,7 @@
   <script src="js/loaders/GLTFLoader.js"></script>
   <script src="js/controls/OrbitControls2.js"></script>
   <script src="js/WebGL.js"></script>
-
+  <script src="js/libs/stats.min.js"></script>
   <script src="js/libs/dat.gui.js"></script>
   <script src="js/controls/DeviceOrientationControls.js"></script>
   <script src="js/controls/DragControls.js"></script>
@@ -1434,7 +1434,7 @@ void main()
 
     gui = new dat.GUI();
 
-    //stats = new Stats();
+    stats = new Stats();
 
     renderer = new THREE.WebGLRenderer({ canvas: canvas, context: gl });
     renderer.setPixelRatio(window.devicePixelRatio);
@@ -1443,7 +1443,7 @@ void main()
     
     container = document.getElementById('container');
     container.appendChild(renderer.domElement);
-    //container.appendChild(stats.dom);
+    container.appendChild(stats.dom);
 
 
     //cube map depth texture generate
@@ -1846,7 +1846,7 @@ void main()
 
     gui.add(map_select_api,'map_type').options(map_select).onChange(function (val)
     {
-      if( val=="CSM_Seamless DP Map" )
+      if( val=="CSR_Seamless DP Map" )
       {
         maptype = 0;
         screen_zmesh1.material = csm_dp_mat;
@@ -1860,7 +1860,7 @@ void main()
         screen_zmesh2.material = pcf_dp_mat;
         screen_mesh.material = pcf_dp_mat;
       }
-      if( val=="CSM_Cubemap" )
+      if( val=="CSR_Cubemap" )
       {
         maptype = 2;
         screen_zmesh1.material = csm_cm_mat;
@@ -1983,7 +1983,7 @@ function animate()
   requestAnimationFrame(animate);
   cameraScreen_controls.update();
   render();
-  //stats.update();
+  stats.update();
 }
 
 
