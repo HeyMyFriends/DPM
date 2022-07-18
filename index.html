@@ -1719,7 +1719,7 @@ void main()
     });
 
     cameraScreen = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-    cameraScreen.position.set(0.4, 3, 3);
+    cameraScreen.position.set(0.5, 3, 3);
     
     cameraScreen_controls = new THREE.OrbitControls(cameraScreen, renderer.domElement);
     cameraScreen_controls.maxPolarAngle = Math.PI * 0.5;
@@ -1941,6 +1941,7 @@ void main()
       grid.position.set(0, .002, 0);
       grid.material.opacity = 0.2;
       grid.material.transparent = true;
+      grid.material.visible = false;
 
       var geometry = new THREE.SphereBufferGeometry(1, 20, 20);
       light_sphere = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: 0xDDDDDD }));
