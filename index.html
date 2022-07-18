@@ -2066,10 +2066,10 @@ void main()
         var tmp = gltf.scene;
         model.push(tmp);
         tmp.rotation.z =  -Math.PI / 4;
-        tmp.scale.set(.0001, .0001, .0001);
-        tmp.translateOnAxis(modelforward, .0001);
+        tmp.scale.set(.008, .008, .008);
+        tmp.translateOnAxis(modelforward, .008);
        
-        tmp.position.set(1, .0001, -(model.length-1)*tile_length*2);
+        tmp.position.set(1, .008, -(model.length-1)*tile_length*2);
         
         sceneScreen.add(tmp);
 
