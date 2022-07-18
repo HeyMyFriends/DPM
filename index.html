@@ -1983,7 +1983,7 @@ void main()
       var textMaterial = new THREE.MeshPhongMaterial({ color: 0x03c03c });
       var mesh = new THREE.Mesh(textGeo, textMaterial);
       mesh.position.set(0, 0, -1);
-      scene.add(mesh);
+      sceneScreen.add(mesh);
     });
 
 
@@ -2068,10 +2068,10 @@ void main()
         var tmp = gltf.scene;
         model.push(tmp);
         //tmp.rotation.z =  -Math.PI / 4;
-        tmp.scale.set(.001, .001, .001);
-        tmp.translateOnAxis(modelforward, .001);
+        tmp.scale.set(.01, .01, .01);
+        tmp.translateOnAxis(modelforward, .01);
        
-        tmp.position.set(1, .001, -(model.length-1)*tile_length*2);
+        tmp.position.set(1, .01, -(model.length-1)*tile_length*2);
         
         sceneScreen.add(tmp);
 
@@ -2244,7 +2244,7 @@ void main()
       });
 */
 
-    gui.add(settings, 'robot number', 1, 32, 1).onChange(
+    gui.add(settings, 'robot number', 1, 10, 1).onChange(
       function (val) {
         num_of_display_robot = val;
       });
