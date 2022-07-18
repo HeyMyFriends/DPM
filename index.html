@@ -2032,10 +2032,10 @@ void main()
       {
         var tmp = gltf.scene;
         model.push(tmp);
-        tmp.scale.set(.02, .02, .02);
-        tmp.translateOnAxis(modelforward, .02);
+        tmp.scale.set(.01, .01, .01);
+        tmp.translateOnAxis(modelforward, .01);
        
-        tmp.position.set(1, .02, -(model.length-1)*tile_length*2);
+        tmp.position.set(1, .01, -(model.length-1)*tile_length*2);
         
         sceneScreen.add(tmp);
 
