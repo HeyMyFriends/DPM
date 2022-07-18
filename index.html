@@ -36,6 +36,7 @@
 
   <script src="build/three.js"></script>
   <script src="js/loaders/GLTFLoader.js"></script>
+  <script src="js/loaders/FBXLoader.js"></script>
   <script src="js/controls/OrbitControls2.js"></script>
   <script src="js/WebGL.js"></script>
   <script src="js/libs/stats.min.js"></script>
@@ -1718,8 +1719,8 @@ void main()
       //side: THREE.DoubleSide,
     });
 
-    cameraScreen = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-    cameraScreen.position.set(0.6, 3, 3);
+    cameraScreen = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
+    cameraScreen.position.set(0.6, 3.5, 3.5);
     
     cameraScreen_controls = new THREE.OrbitControls(cameraScreen, renderer.domElement);
     cameraScreen_controls.maxPolarAngle = Math.PI * 0.5;
@@ -1924,7 +1925,7 @@ void main()
       screen_mesh.rotation.x = -Math.PI / 2;
 
       screen_mesh2 = new THREE.Mesh(new THREE.PlaneBufferGeometry(20, 20, 100, 100), csm_dp_mat);
-      screen_mesh2.position.set(0, 0, -2.0);
+      screen_mesh2.position.set(0, 0, -2.3);
 
       screen_mesh3 = new THREE.Mesh(new THREE.PlaneBufferGeometry(20, 20, 100, 100), csm_dp_mat);
       screen_mesh3.rotation.y = Math.PI / 2;
@@ -1965,6 +1966,26 @@ void main()
     sceneScreen.add(light_sphere);
     
     sceneScreen.add(my_dot);
+
+    var loader = new THREE.FontLoader();
+    loader.load('gentilis_regular.typeface.json', function (font) {
+    var textGeo = new THREE.TextGeometry('HELLO WORLD', {
+      font: font,
+      size: .8,
+      height: .8,
+      curveSegments: .05,
+      bevelThickness: .05,
+      bevelSize: .05,
+      bevelEnabled: true
+    });
+    var textMaterial = new THREE.MeshPhongMaterial({ color: 0x03c03c });
+    var mesh = new THREE.Mesh(textGeo, textMaterial);
+    mesh.position.set(0, 0, -1);
+    sceneScreen.add(mesh);
+   });
+
+
+
     // let floorGeometry = new THREE.PlaneGeometry(3000, 3000)
     // let floorMaterial = new THREE.MeshPhongMaterial({color: 0xff0000})
     // let floor = new THREE.Mesh(floorGeometry, floorMaterial)
@@ -2023,15 +2044,28 @@ void main()
 
     sceneScreen.add(line);
 
+    // light = new THREE.HemisphereLight(0xffffff, 0x444444);
+    // light.position.set(0, 20, 0);
+    // sceneScreen.add(light);
+    // light = new THREE.DirectionalLight(0xffffff);
+    // light.position.set(0, 20, 10);
+    // light.castShadow = true;
+    // sceneScreen.add(light);
+    var ambiColor = '#0C0C0C';
+    var ambientLight = new THREE.AmbientLight(ambiColor);
+    sceneScreen.add(ambientLight);
 
     var i;
     for( i=0; i<32; i++ )
     {
       var loader = new THREE.GLTFLoader();
-      loader.load('models/gltf/RobotExpressive/Totoro.glb', function (gltf)
+      //var loader = new THREE.OBJLoader();
+
+      loader.load('models/gltf/RobotExpressive/chalon.glb', function (gltf)
       {
         var tmp = gltf.scene;
         model.push(tmp);
+        tmp.rotation.z =  -Math.PI / 2;
         tmp.scale.set(.01, .01, .01);
         tmp.translateOnAxis(modelforward, .01);
        
@@ -2273,6 +2307,7 @@ function animate()
     var radius = tile_length*2 * nrobot / (2*Math.PI);
     radius = Math.max(1,radius);
     //model[i].rotation.y = -theta;
+    model[i].rotation.y -= 0.015;
     model[i].position.set( i * 0.2 , .3, i % 5 );
   }
 
