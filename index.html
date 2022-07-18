@@ -1621,7 +1621,7 @@ void main()
 
   var cameraScreen, cameraScreen_controls;
   var screen_zmesh1, screen_zmesh2;
-  var screen_mesh; 
+  var screen_mesh,screen_mesh2,screen_mesh3,screen_mesh4; 
 
   var sceneScreen;
   var light_sphere;
@@ -1910,18 +1910,32 @@ void main()
 
     {
       //ring objects
-      var rt_geometry = new THREE.TorusBufferGeometry(.2, .05, 15, 30);
-      screen_zmesh1 = new THREE.Mesh(rt_geometry, csm_dp_mat);
-      screen_zmesh1.position.set(0, .25, 0);
-      screen_zmesh1.scale.set(1,1,1);
-      screen_zmesh1.rotation.y = 0;
-      screen_zmesh2 = new THREE.Mesh(rt_geometry, csm_dp_mat);
-      screen_zmesh2.position.set(0, .5, 0);
-      screen_zmesh2.scale.set(0.75, 0.75, 0.75);
-      screen_zmesh2.rotation.y = Math.PI / 2;
+      // var rt_geometry = new THREE.TorusBufferGeometry(.2, .05, 15, 30);
+      // screen_zmesh1 = new THREE.Mesh(rt_geometry, csm_dp_mat);
+      // screen_zmesh1.position.set(0, .25, 0);
+      // screen_zmesh1.scale.set(1,1,1);
+      // screen_zmesh1.rotation.y = 0;
+      // screen_zmesh2 = new THREE.Mesh(rt_geometry, csm_dp_mat);
+      // screen_zmesh2.position.set(0, .5, 0);
+      // screen_zmesh2.scale.set(0.75, 0.75, 0.75);
+      // screen_zmesh2.rotation.y = Math.PI / 2;
 
       screen_mesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(20, 20, 100, 100), csm_dp_mat);
       screen_mesh.rotation.x = -Math.PI / 2;
+
+      screen_mesh2 = new THREE.Mesh(new THREE.PlaneBufferGeometry(20, 20, 100, 100), csm_dp_mat);
+      screen_mesh2.position.set(0, 0, -1);
+
+      screen_mesh3 = new THREE.Mesh(new THREE.PlaneBufferGeometry(20, 20, 100, 100), csm_dp_mat);
+      screen_mesh3.rotation.y = Math.PI / 2;
+      screen_mesh3.position.set(-0.5, 0, 0);
+
+      screen_mesh4 = new THREE.Mesh(new THREE.PlaneBufferGeometry(20, 20, 100, 100), csm_dp_mat);
+      screen_mesh4.rotation.y = -Math.PI / 2;
+      screen_mesh4.position.set(1.5, 0, 0);
+
+
+
 
       grid = new THREE.GridHelper(20, 100, 0x000000, 0x000000);
       grid.position.set(0, .002, 0);
@@ -1940,17 +1954,33 @@ void main()
     }
 
     sceneScreen = new THREE.Scene();
-    sceneScreen.add(screen_zmesh1);
-    sceneScreen.add(screen_zmesh2);
+    // sceneScreen.add(screen_zmesh1);
+    // sceneScreen.add(screen_zmesh2);
     sceneScreen.add(screen_mesh);
+    sceneScreen.add(screen_mesh2);
+    sceneScreen.add(screen_mesh3);
+    sceneScreen.add(screen_mesh4);
     sceneScreen.add(grid);
     sceneScreen.add(light_sphere);
     
     sceneScreen.add(my_dot);
+    // let floorGeometry = new THREE.PlaneGeometry(3000, 3000)
+    // let floorMaterial = new THREE.MeshPhongMaterial({color: 0xff0000})
+    // let floor = new THREE.Mesh(floorGeometry, floorMaterial)
+    //floor.rotation.x = -0.5 * Math.PI
+    // floor.receiveShadow = true
+    // floor.position.y = -0.001
+    // sceneScreen.add(floor)
 
 
-
-    
+    // const dirLight = new THREE.DirectionalLight(0xffffff, 0.6)
+    // //var ambientLight = new THREE.AmbientLight(0xffffff);
+    // //光源等位置
+    // dirLight.position.set(-10, 8, -5)
+    // //可以产生阴影
+    // dirLight.castShadow = true
+    // dirLight.shadow.mapSize = new THREE.Vector2(1024, 1024)
+    // sceneScreen.add(dirLight);
 
     objects = [];
     objects.push(light_sphere);
