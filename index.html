@@ -1969,6 +1969,23 @@ void main()
 
     
 
+    var loader = new THREE.FontLoader();
+    loader.load('fonts/gentilis_regular.typeface.json', function (font) {
+      var textGeo = new THREE.TextGeometry('HELLO WORLD', {
+        font: font,
+        size: .8,
+        height: .8,
+        curveSegments: .05,
+        bevelThickness: .05,
+        bevelSize: .05,
+        bevelEnabled: true
+      });
+      var textMaterial = new THREE.MeshPhongMaterial({ color: 0x03c03c });
+      var mesh = new THREE.Mesh(textGeo, textMaterial);
+      mesh.position.set(0, 0, -1);
+      scene.add(mesh);
+    });
+
 
 
     // let floorGeometry = new THREE.PlaneGeometry(3000, 3000)
@@ -2046,15 +2063,15 @@ void main()
       var loader = new THREE.GLTFLoader();
       //var loader = new THREE.OBJLoader();
 
-      loader.load('models/gltf/RobotExpressive/chalon.glb', function (gltf)
+      loader.load('models/gltf/RobotExpressive/Totoro.glb', function (gltf)
       {
         var tmp = gltf.scene;
         model.push(tmp);
-        tmp.rotation.z =  -Math.PI / 4;
-        tmp.scale.set(.008, .008, .008);
-        tmp.translateOnAxis(modelforward, .008);
+        //tmp.rotation.z =  -Math.PI / 4;
+        tmp.scale.set(.001, .001, .001);
+        tmp.translateOnAxis(modelforward, .001);
        
-        tmp.position.set(1, .008, -(model.length-1)*tile_length*2);
+        tmp.position.set(1, .001, -(model.length-1)*tile_length*2);
         
         sceneScreen.add(tmp);
 
