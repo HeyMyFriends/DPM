@@ -2671,7 +2671,9 @@ gl.uniformMatrix4fv(drawcmtex_shader.mtc, true, [-1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0
           }
 
           my_dot.position.copy(beizer_pos[3]);
-          //light_sphere.position.copy(beizer_pos[3]);
+
+          
+
           lineA.verticesNeedUpdate=true;
           lineA.vertices[2].copy(beizer_direction(beizer_t));
           modelforward.copy(beizer_direction(beizer_t));
@@ -2681,6 +2683,7 @@ gl.uniformMatrix4fv(drawcmtex_shader.mtc, true, [-1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0
           tmp.cross(modelforward0);
           //model[0].rotation.y =  (tmp.y>0?-1:1) * Math.acos(modelforward.dot(modelforward0));
           model[0].position.copy(beizer(beizer_t));
+          light_sphere.position.copy(beizer(beizer_t));
           model[0].position.y = .3;
         }
       }
