@@ -1998,10 +1998,10 @@ void main()
       {
         var tmp = gltf.scene;
         model.push(tmp);
-        tmp.scale.set(.1, .1, .1);
-        tmp.translateOnAxis(modelforward, .1);
+        tmp.scale.set(.001, .001, .001);
+        tmp.translateOnAxis(modelforward, .001);
        
-        tmp.position.set(1, .1, -(model.length-1)*tile_length*2);
+        tmp.position.set(1, .001, -(model.length-1)*tile_length*2);
         
         sceneScreen.add(tmp);
 
