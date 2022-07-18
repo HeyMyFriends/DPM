@@ -1967,22 +1967,7 @@ void main()
     
     sceneScreen.add(my_dot);
 
-    var loader = new THREE.FontLoader();
-    loader.load('gentilis_regular.typeface.json', function (font) {
-    var textGeo = new THREE.TextGeometry('HELLO WORLD', {
-      font: font,
-      size: .8,
-      height: .8,
-      curveSegments: .05,
-      bevelThickness: .05,
-      bevelSize: .05,
-      bevelEnabled: true
-    });
-    var textMaterial = new THREE.MeshPhongMaterial({ color: 0x03c03c });
-    var mesh = new THREE.Mesh(textGeo, textMaterial);
-    mesh.position.set(0, 0, -1);
-    sceneScreen.add(mesh);
-   });
+    
 
 
 
