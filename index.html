@@ -1719,7 +1719,7 @@ void main()
     });
 
     cameraScreen = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-    cameraScreen.position.set(.3, 3, 3);
+    cameraScreen.position.set(0.4, 3, 3);
     
     cameraScreen_controls = new THREE.OrbitControls(cameraScreen, renderer.domElement);
     cameraScreen_controls.maxPolarAngle = Math.PI * 0.5;
@@ -1924,15 +1924,15 @@ void main()
       screen_mesh.rotation.x = -Math.PI / 2;
 
       screen_mesh2 = new THREE.Mesh(new THREE.PlaneBufferGeometry(20, 20, 100, 100), csm_dp_mat);
-      screen_mesh2.position.set(0, 0, -2);
+      screen_mesh2.position.set(0, 0, -2.0);
 
       screen_mesh3 = new THREE.Mesh(new THREE.PlaneBufferGeometry(20, 20, 100, 100), csm_dp_mat);
       screen_mesh3.rotation.y = Math.PI / 2;
-      screen_mesh3.position.set(-1.5, 0, 0);
+      screen_mesh3.position.set(-1.0, 0, 0);
 
       screen_mesh4 = new THREE.Mesh(new THREE.PlaneBufferGeometry(20, 20, 100, 100), csm_dp_mat);
       screen_mesh4.rotation.y = -Math.PI / 2;
-      screen_mesh4.position.set(2.5, 0, 0);
+      screen_mesh4.position.set(2.0, 0, 0);
 
 
 
@@ -2010,13 +2010,16 @@ void main()
     var material = new THREE.LineBasicMaterial({
       color: 0x0000ff
     });
+    material.visible =false;
     lineA = new THREE.Geometry();
     lineA.vertices.push(
       new THREE.Vector3(0, 0, 1),
       new THREE.Vector3(0, 0, 0),
       new THREE.Vector3(Math.sqrt(.5), 0, Math.sqrt(.5))
     );
+
     var line = new THREE.Line(lineA, material);
+
     sceneScreen.add(line);
 
 
@@ -2028,10 +2031,10 @@ void main()
       {
         var tmp = gltf.scene;
         model.push(tmp);
-        tmp.scale.set(.01, .01, .01);
-        tmp.translateOnAxis(modelforward, .01);
+        tmp.scale.set(.03, .03, .03);
+        tmp.translateOnAxis(modelforward, .03);
        
-        tmp.position.set(1, .01, -(model.length-1)*tile_length*2);
+        tmp.position.set(1, .03, -(model.length-1)*tile_length*2);
         
         sceneScreen.add(tmp);
 
