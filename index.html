@@ -2735,10 +2735,10 @@ gl.uniformMatrix4fv(drawcmtex_shader.mtc, true, [-1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0
     pcf_dp_mat.uniforms["lightsize"].value = lightsize;
     pcf_dp_mat.uniforms["zFar"].value = zFar;
 
-    pcf_dp_mat2.uniforms["l"].value.set(l.x, l.y, l.z);
-    pcf_dp_mat2.uniforms["eye"].value = cameraScreen.position;
-    pcf_dp_mat2.uniforms["lightsize"].value = lightsize;
-    pcf_dp_mat2.uniforms["zFar"].value = zFar;
+    // pcf_dp_mat2.uniforms["l"].value.set(l.x, l.y, l.z);
+    // pcf_dp_mat2.uniforms["eye"].value = cameraScreen.position;
+    // pcf_dp_mat2.uniforms["lightsize"].value = lightsize;
+    // pcf_dp_mat2.uniforms["zFar"].value = zFar;
 
 
     hs_dp_mat.uniforms["l"].value.set(l.x, l.y, l.z);
