@@ -1617,7 +1617,7 @@ void main()
   var settings;
 
   var cm_camera, cm_face_mat, csm_cm_mat, cm_rt, cm_texid, pcf_cm_mat, hs_cm_mat;
-  var cameraRTT, materialRTT, csm_dp_mat, texdp_rt_id, texdp_id, pcf_dp_mat, pcf_dp_mat2, hs_dp_mat;
+  var cameraRTT, materialRTT, csm_dp_mat, texdp_rt_id, texdp_id, pcf_dp_mat, hs_dp_mat;
 
 
   var cameraScreen, cameraScreen_controls;
@@ -1875,8 +1875,10 @@ void main()
         shadow_a: { value: shadow_a },
         shadow_b: { value: shadow_b },
       },
-      vertexShader: document.getElementById('pcf_cm_shader_vs').textContent,
-      fragmentShader: document.getElementById('pcf_cm_shader_fs').textContent
+      //vertexShader: document.getElementById('pcf_cm_shader_vs').textContent,
+      //fragmentShader: document.getElementById('pcf_cm_shader_fs').textContent
+      vertexShader: document.getElementById('csm_cm_shader_vs').textContent,
+      fragmentShader: document.getElementById('csm_cm_shader_fs').textContent
     });
 
     hs_cm_mat = new THREE.ShaderMaterial({
@@ -2222,13 +2224,7 @@ void main()
         screen_zmesh2.material = hs_cm_mat;
         screen_mesh.material = hs_cm_mat;
       }
-      if( val=="PCF_Seamless DP Map(new alpha testing)" )
-      {
-        maptype = 6;
-        screen_zmesh1.material = pcf_dp_mat2;
-        screen_zmesh2.material = pcf_dp_mat2;
-        screen_mesh.material = pcf_dp_mat2;
-      }
+
 
       
 
