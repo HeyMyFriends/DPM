@@ -1609,7 +1609,7 @@ void main()
   var state_api = { state: 'Idle' };
 
   
-  var map_select = ['CSM_Seamless DP Map', 'PCF_Seamless DP Map', 'CSM_Cubemap', 'PCF_Cubemap', 'HardShadow_Seamless DP Map', 'HardShadow_Cubemap'];
+  var map_select = ['CSM_Seamless DP Map', 'CSM_Cubemap', 'PCF_Seamless DP Map', 'PCF_Cubemap', 'HardShadow_Seamless DP Map', 'HardShadow_Cubemap'];
   var map_select_api = { map_type: 'CSM_Seamless DP Map' };
   var maptype = 0;
 
@@ -1720,7 +1720,7 @@ void main()
     });
 
     cameraScreen = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
-    cameraScreen.position.set(0.6, 3.5, 3.5);
+    cameraScreen.position.set(0.8, 3.5, 3.5);
     
     cameraScreen_controls = new THREE.OrbitControls(cameraScreen, renderer.domElement);
     cameraScreen_controls.maxPolarAngle = Math.PI * 0.5;
@@ -1971,10 +1971,10 @@ void main()
 
     var loader = new THREE.FontLoader();
     loader.load('fonts/gentilis_regular.typeface.json', function (font) {
-      var textGeo = new THREE.TextGeometry('HELLO WORLD', {
+      var textGeo = new THREE.TextGeometry('MODEL IS LOADING', {
         font: font,
-        size: .8,
-        height: .8,
+        size: .3,
+        height: .3,
         curveSegments: .05,
         bevelThickness: .05,
         bevelSize: .05,
@@ -1982,7 +1982,8 @@ void main()
       });
       var textMaterial = new THREE.MeshPhongMaterial({ color: 0x03c03c });
       var mesh = new THREE.Mesh(textGeo, textMaterial);
-      mesh.position.set(0, 0, -1);
+      mesh.receiveShadow = false;
+      mesh.position.set(0, 0, -1.5);
       sceneScreen.add(mesh);
     });
 
@@ -2167,7 +2168,7 @@ void main()
       'lightsize': lightsize,
       'Tiles/Second': tiles_per_second,
       'tex_id':draw_tex_id,
-      'robot number':num_of_display_robot,
+      'number of models':num_of_display_robot,
       'time_scale': time_scale,
       'full screen': 0
 /*      'PCF_DP_Filtersize': pcf_dp_filetersize,
@@ -2244,7 +2245,7 @@ void main()
       });
 */
 
-    gui.add(settings, 'robot number', 1, 10, 1).onChange(
+    gui.add(settings, 'number of models', 1, 10, 1).onChange(
       function (val) {
         num_of_display_robot = val;
       });
@@ -2257,29 +2258,29 @@ void main()
     //       closeFullscreen();
     //   });
 
-    gui.add(settings, 'lightsize', 0.02, .2, .001).onChange(
-      function (val) {
-        lightsize = val;
-        light_sphere.scale.set(lightsize, lightsize, lightsize);
-      });
+    // gui.add(settings, 'lightsize', 0.02, .2, .001).onChange(
+    //   function (val) {
+    //     lightsize = val;
+    //     light_sphere.scale.set(lightsize, lightsize, lightsize);
+    //   });
 
-    var expressionFolder = gui.addFolder('Settings');
+    // var expressionFolder = gui.addFolder('Settings');
 
-    expressionFolder.add(settings, 'tex_id', -1, 4, 1).onChange(
-      function (val) {
-        draw_tex_id = val;
-      });
-    expressionFolder.add(settings, 'Tiles/Second', 1, 10, .001).onChange(
-      function (val) {
-        tiles_per_second = val;
-      });
-    expressionFolder.add(settings, 'time_scale', 0.0, 3, .0001).onChange(
-      function (val) {
-        time_scale = val;
-        clearInterval(my_interval_id);
-        if(time_scale>0)
-        my_interval_id = setInterval( 'robot_say_hi()', 10000/time_scale );
-      });
+    // expressionFolder.add(settings, 'tex_id', -1, 4, 1).onChange(
+    //   function (val) {
+    //     draw_tex_id = val;
+    //   });
+    // expressionFolder.add(settings, 'Tiles/Second', 1, 10, .001).onChange(
+    //   function (val) {
+    //     tiles_per_second = val;
+    //   });
+    // expressionFolder.add(settings, 'time_scale', 0.0, 3, .0001).onChange(
+    //   function (val) {
+    //     time_scale = val;
+    //     clearInterval(my_interval_id);
+    //     if(time_scale>0)
+    //     my_interval_id = setInterval( 'robot_say_hi()', 10000/time_scale );
+    //   });
 
     // expressionFolder.open();
 
@@ -2309,8 +2310,8 @@ function animate()
     var radius = tile_length*2 * nrobot / (2*Math.PI);
     radius = Math.max(1,radius);
     //model[i].rotation.y = -theta;
-    model[i].rotation.y -= 0.015;
-    model[i].position.set( i * 0.2 , .3, i % 5 );
+    model[i].rotation.y -= 0.15;
+    model[i].position.set( i * 0.1 , .01, i / 5 );
   }
 
   if (mixer[0]) mixer[0].update(dt * tiles_per_second*tiles_length);
