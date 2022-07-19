@@ -1719,8 +1719,8 @@ void main()
       //side: THREE.DoubleSide,
     });
 
-    cameraScreen = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
-    cameraScreen.position.set(0.8, 3.5, 3.5);
+    cameraScreen = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 1000);
+    cameraScreen.position.set(1.8, 3.5, 3.5);
     
     cameraScreen_controls = new THREE.OrbitControls(cameraScreen, renderer.domElement);
     cameraScreen_controls.maxPolarAngle = Math.PI * 0.5;
@@ -1925,15 +1925,15 @@ void main()
       screen_mesh.rotation.x = -Math.PI / 2;
 
       screen_mesh2 = new THREE.Mesh(new THREE.PlaneBufferGeometry(20, 20, 100, 100), csm_dp_mat);
-      screen_mesh2.position.set(0, 0, -2.3);
+      screen_mesh2.position.set(0, 0, -2.5);
 
       screen_mesh3 = new THREE.Mesh(new THREE.PlaneBufferGeometry(20, 20, 100, 100), csm_dp_mat);
       screen_mesh3.rotation.y = Math.PI / 2;
-      screen_mesh3.position.set(-1.0, 0, 0);
+      screen_mesh3.position.set(-2, 0, 0);
 
       screen_mesh4 = new THREE.Mesh(new THREE.PlaneBufferGeometry(20, 20, 100, 100), csm_dp_mat);
       screen_mesh4.rotation.y = -Math.PI / 2;
-      screen_mesh4.position.set(2.0, 0, 0);
+      screen_mesh4.position.set(3.0, 0, 0);
 
 
 
@@ -1983,7 +1983,7 @@ void main()
       var textMaterial = new THREE.MeshPhongMaterial({ color: 0x03c03c });
       var mesh = new THREE.Mesh(textGeo, textMaterial);
       mesh.receiveShadow = false;
-      mesh.position.set(0, 0, -1.5);
+      mesh.position.set(-1.5, 0, -2.0);
       sceneScreen.add(mesh);
     });
 
