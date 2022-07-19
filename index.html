@@ -1609,8 +1609,8 @@ void main()
   var state_api = { state: 'Idle' };
 
   
-  var map_select = ['CSM_Seamless DP Map', 'CSM_Cubemap', 'PCF_Seamless DP Map', 'PCF_Cubemap', 'HardShadow_Seamless DP Map', 'HardShadow_Cubemap'];
-  var map_select_api = { map_type: 'CSM_Seamless DP Map' };
+  var map_select = ['CSR_Seamless DP Map', 'CSR_Cubemap', 'PCF_Seamless DP Map', 'PCF_Cubemap', 'HardShadow_Seamless DP Map', 'HardShadow_Cubemap'];
+  var map_select_api = { map_type: 'CSR_Seamless DP Map' };
   var maptype = 0;
 
 
@@ -1762,10 +1762,10 @@ void main()
         shadow_a: { value: shadow_a },
         shadow_b: { value: shadow_b },
       },
-      // vertexShader: document.getElementById('csm_dp_shader_vs').textContent,
-      // fragmentShader: document.getElementById('csm_dp_shader_fs').textContent
-      vertexShader: document.getElementById('hs_dp_shader_vs').textContent,
-      fragmentShader: document.getElementById('hs_dp_shader_fs').textContent
+      vertexShader: document.getElementById('csm_dp_shader_vs').textContent,
+      fragmentShader: document.getElementById('csm_dp_shader_fs').textContent
+      // vertexShader: document.getElementById('hs_dp_shader_vs').textContent,
+      // fragmentShader: document.getElementById('hs_dp_shader_fs').textContent
 
     });
 
@@ -1836,10 +1836,10 @@ void main()
         shadow_a: { value: shadow_a },
         shadow_b: { value: shadow_b },
       },
-      // vertexShader: document.getElementById('csm_cm_shader_vs').textContent,
-      // fragmentShader: document.getElementById('csm_cm_shader_fs').textContent
-      vertexShader: document.getElementById('hs_dp_shader_vs').textContent,
-      fragmentShader: document.getElementById('hs_dp_shader_fs').textContent
+      vertexShader: document.getElementById('csm_cm_shader_vs').textContent,
+      fragmentShader: document.getElementById('csm_cm_shader_fs').textContent
+      // vertexShader: document.getElementById('hs_dp_shader_vs').textContent,
+      // fragmentShader: document.getElementById('hs_dp_shader_fs').textContent
     });
 
     pcf_cm_mat = new THREE.ShaderMaterial({
