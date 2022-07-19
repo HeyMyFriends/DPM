@@ -1985,7 +1985,7 @@ void main()
       var textMaterial = new THREE.MeshPhongMaterial({ color: 0x03c03c });
       var mesh = new THREE.Mesh(textGeo, textMaterial);
       mesh.receiveShadow = false;
-      mesh.position.set(-1.5, .5, -2.0);
+      mesh.position.set(-2.0, .8, -2.0);
       sceneScreen.add(mesh);
     });
 
@@ -2183,45 +2183,45 @@ void main()
       if( val=="CSR_Seamless DP Map" )
       {
         maptype = 0;
-        screen_zmesh1.material = csm_dp_mat;
-        screen_zmesh2.material = csm_dp_mat;
+        // screen_zmesh1.material = csm_dp_mat;
+        // screen_zmesh2.material = csm_dp_mat;
         screen_mesh.material = csm_dp_mat;
       }
       if( val=="PCF_Seamless DP Map" )
       {
         maptype = 1;
-        screen_zmesh1.material = pcf_dp_mat;
-        screen_zmesh2.material = pcf_dp_mat;
+        // screen_zmesh1.material = pcf_dp_mat;
+        // screen_zmesh2.material = pcf_dp_mat;
         screen_mesh.material = pcf_dp_mat;
       }
       if( val=="CSR_Cubemap" )
       {
         maptype = 2;
-        screen_zmesh1.material = csm_cm_mat;
-        screen_zmesh2.material = csm_cm_mat;
+        // screen_zmesh1.material = csm_cm_mat;
+        // screen_zmesh2.material = csm_cm_mat;
         screen_mesh.material = csm_cm_mat;
       }
       if( val=="PCF_Cubemap" )
       {
         maptype = 3;
-        screen_zmesh1.material = pcf_cm_mat;
-        screen_zmesh2.material = pcf_cm_mat;
+        // screen_zmesh1.material = pcf_cm_mat;
+        // screen_zmesh2.material = pcf_cm_mat;
         screen_mesh.material = pcf_cm_mat;
       }
 
       if( val=="HardShadow_Seamless DP Map" )
       {
         maptype = 4;
-        screen_zmesh1.material = hs_dp_mat;
-        screen_zmesh2.material = hs_dp_mat;
+        // screen_zmesh1.material = hs_dp_mat;
+        // screen_zmesh2.material = hs_dp_mat;
         screen_mesh.material = hs_dp_mat;
       }
 
       if( val=="HardShadow_Cubemap" )
       {
         maptype = 5;
-        screen_zmesh1.material = hs_cm_mat;
-        screen_zmesh2.material = hs_cm_mat;
+        // screen_zmesh1.material = hs_cm_mat;
+        // screen_zmesh2.material = hs_cm_mat;
         screen_mesh.material = hs_cm_mat;
       }
 
