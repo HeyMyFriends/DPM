@@ -15,7 +15,7 @@ class vec3
   neg() { return new vec3(-this.x, -this.y, -this.z); }
   div(w) { return new vec3(this.x / w, this.y / w, this.z / w); }
   xmul(m) {
-      var v = new vec3(
+      var v = new vec3(  
         this.x * m[0] + this.y * m[4] + this.z * m[8] + m[12],
         this.x * m[1] + this.y * m[5] + this.z * m[9] + m[13],
         this.x * m[2] + this.y * m[6] + this.z * m[10] + m[14]

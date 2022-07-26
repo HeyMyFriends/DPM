@@ -2085,67 +2085,10 @@ void main()
 
   }
 
-  /*actions = {};
-  var states = ['Idle', 'Walking', 'Running', 'Dance', 'Death', 'Sitting', 'Standing'];
-  var emotes = [ 'Jump', 'Yes', 'No', 'Wave', 'Punch', 'ThumbsUp' ];
 
-  function robot_say_hi()
-  {
-    if( beizer_t_running )
-      return;
-
-    var hi_actions = ['Dance', 'Death','Jump', 'Yes', 'No', 'Wave', 'Punch', 'ThumbsUp' ];
-    fadeToAction( hi_actions[ Math.floor(hi_actions.length*Math.random()) ], 0.2 );
-    mixer[0].addEventListener( 'finished', restoreState );
-
-    face.morphTargetInfluences[0] = Math.random();
-    face.morphTargetInfluences[1] = 0;
-    face.morphTargetInfluences[2] = Math.random();
-  }
-
-  my_interval_id = setInterval( 'robot_say_hi()', 10000/time_scale );*/
-
-
-/*  function fadeToAction( name, duration )
-  {
-    previousAction = activeAction;
-    activeAction = actions[ name ];
-    if ( previousAction !== activeAction )
-      previousAction.fadeOut( duration );
-    activeAction.reset().setEffectiveTimeScale(1).setEffectiveWeight(1).fadeIn(duration).play();
-  }*/
-  /*function restoreState()
-  {
-    mixer[0].removeEventListener( 'finished', restoreState );
-    fadeToAction( state_api.state, 0.5 );
-
-    face.morphTargetInfluences[0] = 0;
-    face.morphTargetInfluences[1] = 1;
-    face.morphTargetInfluences[2] = 0;
-  }*/
 
   function createGUI(model, animations)
   {
-    /*face = model.getObjectByName( 'Head_2' );
-
-
-    for (var i = 0; i < animations.length; i++)
-    {
-      var clip = animations[i];
-      var action = mixer[0].clipAction(clip);
-      actions[clip.name] = action;
-      if( emotes.indexOf(clip.name )>= 0 || states.indexOf(clip.name)>=3 )
-      {
-        action.clampWhenFinished = true;
-        action.loop = THREE.LoopOnce;
-      }
-    }
-
-    activeAction = actions['Idle'];
-    activeAction.play();
-    face.morphTargetInfluences[0] = 0;
-    face.morphTargetInfluences[1] = 1;
-    face.morphTargetInfluences[2] = 0;*/
 
 
 
@@ -2167,45 +2110,39 @@ void main()
       if( val=="CSR_Seamless DP Map" )
       {
         maptype = 0;
-        // screen_zmesh1.material = csm_dp_mat;
-        // screen_zmesh2.material = csm_dp_mat;
+
         screen_mesh.material = csm_dp_mat;
       }
       if( val=="PCF_Seamless DP Map" )
       {
         maptype = 1;
-        // screen_zmesh1.material = pcf_dp_mat;
-        // screen_zmesh2.material = pcf_dp_mat;
+
         screen_mesh.material = pcf_dp_mat;
       }
       if( val=="CSR_Cubemap" )
       {
         maptype = 2;
-        // screen_zmesh1.material = csm_cm_mat;
-        // screen_zmesh2.material = csm_cm_mat;
+
         screen_mesh.material = csm_cm_mat;
       }
       if( val=="PCF_Cubemap" )
       {
         maptype = 3;
-        // screen_zmesh1.material = pcf_cm_mat;
-        // screen_zmesh2.material = pcf_cm_mat;
+
         screen_mesh.material = pcf_cm_mat;
       }
 
       if( val=="HardShadow_Seamless DP Map" )
       {
         maptype = 4;
-        // screen_zmesh1.material = hs_dp_mat;
-        // screen_zmesh2.material = hs_dp_mat;
+
         screen_mesh.material = hs_dp_mat;
       }
 
       if( val=="HardShadow_Cubemap" )
       {
         maptype = 5;
-        // screen_zmesh1.material = hs_cm_mat;
-        // screen_zmesh2.material = hs_cm_mat;
+    
         screen_mesh.material = hs_cm_mat;
       }
 
@@ -2214,55 +2151,14 @@ void main()
 
     });
 
-/*    gui.add(settings, 'PCF_DP_Filtersize', 4.0, 8.0, 2.0).onChange(
-      function (val) {
-        pcf_dp_filetersize = val;
-      });
 
-    gui.add(settings, 'PCF_CM_Filtersize', 4.0, 8.0, 2.0).onChange(
-      function (val) {
-        pcf_cm_filetersize = val;
-      });
-*/
 
     gui.add(settings, 'number of models', 1, 10, 1).onChange(
       function (val) {
         num_of_display_robot = val;
       });
 
-    // gui.add(settings, 'full screen', 0, 1, 1).onChange(
-    //   function (val) {
-    //     if (val == 1)
-    //       openFullscreen();
-    //     else
-    //       closeFullscreen();
-    //   });
-
-    // gui.add(settings, 'lightsize', 0.02, .2, .001).onChange(
-    //   function (val) {
-    //     lightsize = val;
-    //     light_sphere.scale.set(lightsize, lightsize, lightsize);
-    //   });
-
-    // var expressionFolder = gui.addFolder('Settings');
-
-    // expressionFolder.add(settings, 'tex_id', -1, 4, 1).onChange(
-    //   function (val) {
-    //     draw_tex_id = val;
-    //   });
-    // expressionFolder.add(settings, 'Tiles/Second', 1, 10, .001).onChange(
-    //   function (val) {
-    //     tiles_per_second = val;
-    //   });
-    // expressionFolder.add(settings, 'time_scale', 0.0, 3, .0001).onChange(
-    //   function (val) {
-    //     time_scale = val;
-    //     clearInterval(my_interval_id);
-    //     if(time_scale>0)
-    //     my_interval_id = setInterval( 'robot_say_hi()', 10000/time_scale );
-    //   });
-
-    // expressionFolder.open();
+  
 
   }
 
@@ -2670,22 +2566,20 @@ gl.uniformMatrix4fv(drawcmtex_shader.mtc, true, [-1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0
   {
     {
       var dtheta = 2*Math.PI * dt * .6;
-      //screen_zmesh1.rotation.y -= dtheta;
-      //screen_zmesh2.rotation.y -= dtheta;
 
       if (model[0])
       {
         if( beizer_pos.length>0 )
         {
 
-          //console.log(beizer_length);
+
           var beizer_dt = ((new Date()).getTime()-beizer_t0)/1000 /beizer_length *tiles_per_second *tiles_length * time_scale ;
           beizer_t0 = (new Date()).getTime();
           beizer_t = g_clamp( beizer_t+beizer_dt   , .3, 1 );
 
           if( beizer_t>=1 && beizer_t_running )
           {
-            //fadeToAction( 'Idle', 0.2 );
+      
             beizer_t_running = false;
           }
 
@@ -2700,10 +2594,9 @@ gl.uniformMatrix4fv(drawcmtex_shader.mtc, true, [-1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0
           var tmp = new THREE.Vector3();
           tmp.copy(modelforward);
           tmp.cross(modelforward0);
-          //model[0].rotation.y =  (tmp.y>0?-1:1) * Math.acos(modelforward.dot(modelforward0));
-          //model[0].position.copy(beizer(beizer_t));
+
           light_sphere.position.copy(beizer(beizer_t));
-          //model[0].position.y = .01;
+
           light_sphere.position.y = 1.0;
         }
       }
@@ -2735,10 +2628,7 @@ gl.uniformMatrix4fv(drawcmtex_shader.mtc, true, [-1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0
     pcf_dp_mat.uniforms["lightsize"].value = lightsize;
     pcf_dp_mat.uniforms["zFar"].value = zFar;
 
-    // pcf_dp_mat2.uniforms["l"].value.set(l.x, l.y, l.z);
-    // pcf_dp_mat2.uniforms["eye"].value = cameraScreen.position;
-    // pcf_dp_mat2.uniforms["lightsize"].value = lightsize;
-    // pcf_dp_mat2.uniforms["zFar"].value = zFar;
+
 
 
     hs_dp_mat.uniforms["l"].value.set(l.x, l.y, l.z);
@@ -2761,8 +2651,7 @@ gl.uniformMatrix4fv(drawcmtex_shader.mtc, true, [-1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0
     hs_cm_mat.uniforms["lightsize"].value = lightsize;
     hs_cm_mat.uniforms["zFar"].value = zFar;
 
-    // csm_dp_mat.uniforms["lightmv"].value = new THREE.Matrix4();
-    // sceneScreen.overrideMaterial = materialRTT;
+ 
     renderer.render(sceneScreen, cameraScreen);
 
     if(draw_tex_id>=0)
@@ -2789,11 +2678,11 @@ gl.uniformMatrix4fv(drawcmtex_shader.mtc, true, [-1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0
 function openFullscreen() {
   if (elem.requestFullscreen) {
     elem.requestFullscreen();
-  } else if (elem.mozRequestFullScreen) { /* Firefox */
+  } else if (elem.mozRequestFullScreen) { 
     elem.mozRequestFullScreen();
-  } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+  } else if (elem.webkitRequestFullscreen) { 
     elem.webkitRequestFullscreen();
-  } else if (elem.msRequestFullscreen) { /* IE/Edge */
+  } else if (elem.msRequestFullscreen) { 
     elem.msRequestFullscreen();
   }
 }
@@ -3013,7 +2902,7 @@ function process_up(x,y)
   beizer_t = 0;
 
   beizer_t_running = true;
-  //fadeToAction( 'Running', 0.2 );
+ 
 }
 
 

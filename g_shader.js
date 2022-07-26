@@ -58,7 +58,7 @@ class GShader
   }
   use(str)
   {
-    this.gl.useProgram(this.program);
+    this.gl.useProgram(this.program);  
   }
 }
 

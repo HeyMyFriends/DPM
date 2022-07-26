@@ -15,7 +15,7 @@ genbasis_shader.load_vertex_shader(
      `);
 genbasis_shader.load_fragment_shader(
  `#version 300 es
-        precision highp float;
+        precision highp float;  
 
         #define PI 3.14159265358979
 

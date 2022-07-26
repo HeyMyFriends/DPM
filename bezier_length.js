@@ -115,5 +115,5 @@ function getArcLength(xs, ys, t, n) {
     correctedT = z * tValues[n][i] + z;
     sum += cValues[n][i] * B(xs, ys, correctedT);
   }
-  return z * sum;
+  return z * sum;  
 }

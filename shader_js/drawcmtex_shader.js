@@ -11,7 +11,7 @@ void main()
 {
   gl_Position = mvp*v0;
   tc = t0;
-}
+} 
 `);
 drawcmtex_shader.load_fragment_shader(
  `#version 300 es

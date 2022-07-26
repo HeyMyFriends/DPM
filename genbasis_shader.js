@@ -17,7 +17,7 @@ genbasis_shader.load_fragment_shader(
  `#version 300 es
         precision highp float;
 
-        #define PI 3.14159265358979
+        #define PI 3.14159265358979  
 
         in vec2 tc;
         uniform sampler2D depthmap;

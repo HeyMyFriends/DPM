@@ -10,7 +10,7 @@ genbasis_shader_cm.load_vertex_shader(
   out vec3 tc;
   void main()
   {
-	  gl_Position = mpj * v0;
+	  gl_Position = mpj * v0; 
 	  tc = ( mv * vec4( t0.xy*2.0-1.0, 1.0, 1.0) ).xyz;
   }
 `);
